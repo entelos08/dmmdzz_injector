@@ -22,6 +22,7 @@ NTSTATUS dmmdzz_EnumModule (PDMMDZZ_ENUM_MODULE  p);
 NTSTATUS dmmdzz_QueryBase  (PDMMDZZ_QUERY_BASE   p);
 NTSTATUS dmmdzz_ReadMemory (PDMMDZZ_MEM_OP p, PVOID  buf, ULONG bufLen);
 NTSTATUS dmmdzz_WriteMemory(PDMMDZZ_MEM_OP p, PVOID  buf, ULONG bufLen);
+NTSTATUS dmmdzz_ScanMemory (PDMMDZZ_SCAN_REQUEST p, PVOID buf, ULONG bufLen);
 
 /* Validate a single pointer is fully contained inside a system buffer */
 static __forceinline BOOLEAN InBounds(const VOID *buf, ULONG bufLen,
@@ -109,6 +110,31 @@ NTSTATUS dmmdzz_HandleIoctl(PIRP Irp, PIO_STACK_LOCATION IoStack, ULONG OutLen)
             status = dmmdzz_WriteMemory(p, payload, inLen);
             retBytes = sizeof(*p);   /* we only return the header */
         }
+        break;
+    }
+
+    case IOCTL_DMMDZZ_SCAN_MEMORY: {
+        PDMMDZZ_SCAN_REQUEST p = (PDMMDZZ_SCAN_REQUEST)sysBuf;
+        if (inLen < sizeof(*p)) { status = STATUS_BUFFER_TOO_SMALL; break; }
+
+        /* Validate value bytes are within input buffer */
+        if (p->ValueOffset + p->ValueSize > (SIZE_T)inLen) {
+            status = STATUS_INVALID_PARAMETER; break;
+        }
+
+        /* Results array must fit in output buffer */
+        if (OutLen < p->ResultsOffset) {
+            status = STATUS_BUFFER_TOO_SMALL; break;
+        }
+
+        /* System buffer size = max(inLen, OutLen) */
+        ULONG sysBufLen = (inLen > OutLen) ? inLen : OutLen;
+
+        status = dmmdzz_ScanMemory(p, sysBuf, sysBufLen);
+
+        /* Return header + results array */
+        retBytes = p->ResultsOffset +
+                   p->ResultsCount * (ULONG)sizeof(ULONG_PTR);
         break;
     }
 

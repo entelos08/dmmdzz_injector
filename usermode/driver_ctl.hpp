@@ -69,6 +69,15 @@ public:
     void WriteMemory(uint32_t pid, uintptr_t remoteVA,
                      const void* inBuf, size_t size);
 
+    // Kernel-side memory scan: searches target process for exact byte pattern.
+    // Returns matching addresses in 'outAddrs'. The scan is performed entirely
+    // in the kernel driver (attaches to target process, enumerates regions
+    // via ZwQueryVirtualMemory, compares with RtlCompareMemory).
+    // maxResults caps the number of matches returned.
+    void ScanMemory(uint32_t pid, const void* value, size_t valueSize,
+                    std::vector<uintptr_t>& outAddrs,
+                    size_t maxResults = 100000);
+
 private:
     HANDLE hDevice_ = INVALID_HANDLE_VALUE;
 

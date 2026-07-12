@@ -218,4 +218,59 @@ void DriverCtl::WriteMemory(uint32_t pid, uintptr_t remoteVA,
             std::to_string((unsigned long)hdr->Hdr.Status) + ")");
 }
 
+// -----------------------------------------------------------------------------
+// ScanMemory — kernel-side memory scan via IOCTL_DMMDZZ_SCAN_MEMORY.
+//
+// Buffer layout:
+//   [DMMDZZ_SCAN_REQUEST][value bytes][results: ULONG_PTR[]]
+//
+// The driver attaches to the target process, enumerates committed readable
+// regions, and uses RtlCompareMemory to find exact matches. Matching
+// addresses are written into the results area.
+// -----------------------------------------------------------------------------
+void DriverCtl::ScanMemory(uint32_t pid, const void* value, size_t valueSize,
+                           std::vector<uintptr_t>& outAddrs,
+                           size_t maxResults)
+{
+    outAddrs.clear();
+    if (valueSize == 0 || maxResults == 0) return;
+
+    // Align results offset to 8 bytes (for ULONG_PTR array)
+    const ULONG headerSize  = sizeof(DMMDZZ_SCAN_REQUEST);
+    const ULONG valueOffset = headerSize;
+    const ULONG resultsOffset = (valueOffset + (ULONG)valueSize + 7) & ~7u;
+    const ULONG totalSize  = resultsOffset +
+                             (ULONG)(maxResults * sizeof(uintptr_t));
+
+    std::vector<uint8_t> buf(totalSize, 0);
+    auto* hdr = reinterpret_cast<DMMDZZ_SCAN_REQUEST*>(buf.data());
+
+    hdr->ProcessId     = (HANDLE)(ULONG_PTR)pid;
+    hdr->ValueSize     = valueSize;
+    hdr->ValueOffset   = valueOffset;
+    hdr->MaxResults    = (ULONG)maxResults;
+    hdr->ResultsOffset = resultsOffset;
+
+    // Copy value bytes into buffer
+    std::memcpy(buf.data() + valueOffset, value, valueSize);
+
+    DWORD ret = 0;
+    SendIoctl(IOCTL_DMMDZZ_SCAN_MEMORY,
+              buf.data(), totalSize,
+              buf.data(), totalSize,
+              &ret);
+
+    if (hdr->Hdr.Status != 0)
+        throw std::runtime_error("ScanMemory failed (NTSTATUS=0x" +
+            std::to_string((unsigned long)hdr->Hdr.Status) + ")");
+
+    // Extract results
+    outAddrs.reserve(hdr->ResultsCount);
+    uintptr_t* results = reinterpret_cast<uintptr_t*>(
+        buf.data() + resultsOffset);
+    for (ULONG i = 0; i < hdr->ResultsCount; i++) {
+        outAddrs.push_back(results[i]);
+    }
+}
+
 } // namespace dmmdzz

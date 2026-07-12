@@ -365,6 +365,17 @@ void Scanner::scanRegion(const MemRegion& r, DataType type, ScanOp op,
 
 // ---------------------------------------------------------------------------
 // First scan — scan all readable regions
+//
+// For EQ operations with a concrete byte pattern, the scan is delegated to
+// the kernel driver (IOCTL_DMMDZZ_SCAN_MEMORY), which attaches to the target
+// process, enumerates committed readable regions via ZwQueryVirtualMemory,
+// and matches with RtlCompareMemory. This is both faster and more accurate
+// than the user-mode fallback because it avoids repeated ReadMemory round
+// trips and scans the *correct* process address space directly.
+//
+// Non-EQ operations (GT/LT/GE/LE/RANGE) and baseline ops (INCREASED/
+// DECREASED/CHANGED/UNCHANGED) still use the user-mode multi-threaded path
+// because the driver only implements exact byte matching.
 // ---------------------------------------------------------------------------
 void Scanner::firstScan(DataType type, ScanOp op,
                         const std::string& val1,
@@ -375,10 +386,6 @@ void Scanner::firstScan(DataType type, ScanOp op,
     lastType_ = type;
     results_.clear();
     scannedBytes = 0;
-
-    regions_ = enumRegions();
-    totalBytes = 0;
-    for (auto& r : regions_) totalBytes += r.size;
 
     // For "changed/unchanged/increased/decreased" on first scan, just store all values
     bool storeAll = (op == ScanOp::INCREASED || op == ScanOp::DECREASED ||
@@ -391,6 +398,39 @@ void Scanner::firstScan(DataType type, ScanOp op,
         if (!val1.empty()) target  = parseValue(type, val1);
         if (!val2.empty()) target2 = parseValue(type, val2);
     }
+
+    // ----- Driver-side scan path (EQ only) -----
+    // The driver performs exact byte matching, so we can use it for EQ on any
+    // data type as long as we have a non-empty target within size limits.
+    bool useDriverScan = (op == ScanOp::EQ) &&
+                         !target.empty() &&
+                         target.size() <= DMMDZZ_SCAN_MAX_VALUE_SIZE;
+
+    if (useDriverScan) {
+        // Kernel-side scan: driver attaches to pid_, enumerates regions,
+        // and returns matching addresses. We do NOT need enumRegions() here
+        // because the driver does its own ZwQueryVirtualMemory walk.
+        std::vector<uintptr_t> addrs;
+        drv_.ScanMemory(pid_, target.data(), target.size(), addrs);
+
+        // Build result entries. Since the driver only returns addresses where
+        // the bytes exactly equal target, curValue is simply target itself.
+        results_.reserve(addrs.size());
+        for (uintptr_t a : addrs) {
+            results_.push_back({a, target, {}});
+        }
+
+        // Driver scan doesn't report byte progress; mark as done.
+        totalBytes   = 0;
+        scannedBytes = 0;
+        scanning = false;
+        return;
+    }
+
+    // ----- User-mode fallback path -----
+    regions_ = enumRegions();
+    totalBytes = 0;
+    for (auto& r : regions_) totalBytes += r.size;
 
     if (storeAll) {
         // Store all values as baseline; no filtering
@@ -430,7 +470,7 @@ void Scanner::firstScan(DataType type, ScanOp op,
         }
         for (auto& t : threads) t.join();
     } else {
-        // Multi-threaded scan with filtering
+        // Multi-threaded scan with filtering (NE/GT/LT/GE/LE/RANGE)
         std::mutex mtx;
         std::vector<std::thread> threads;
         unsigned nThreads = std::thread::hardware_concurrency();

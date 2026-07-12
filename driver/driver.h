@@ -61,6 +61,7 @@
 #define IOCTL_DMMDZZ_READ_MEMORY        CTL_CODE(DMMDZZ_DEVICE_TYPE, 0x803, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_DMMDZZ_WRITE_MEMORY       CTL_CODE(DMMDZZ_DEVICE_TYPE, 0x804, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_DMMDZZ_QUERY_BASE         CTL_CODE(DMMDZZ_DEVICE_TYPE, 0x805, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DMMDZZ_SCAN_MEMORY        CTL_CODE(DMMDZZ_DEVICE_TYPE, 0x806, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 /* -------------------------------------------------------------------------
  * Shared data structures
@@ -127,5 +128,29 @@ typedef struct _DMMDZZ_MEM_OP {
     DMMDZZ_STATUS Hdr;
     SIZE_T    BytesTransferred;
 } DMMDZZ_MEM_OP, *PDMMDZZ_MEM_OP;
+
+/* IOCTL_DMMDZZ_SCAN_MEMORY ------------------------------------------------ */
+/* Kernel-side memory scan: searches target process for exact byte pattern.
+ *
+ * Buffer layout (METHOD_BUFFERED):
+ *   [DMMDZZ_SCAN_REQUEST header][value bytes][results array]
+ *
+ * The driver attaches to the target process, enumerates committed readable
+ * regions via ZwQueryVirtualMemory, and uses RtlCompareMemory to find
+ * exact matches. Matching addresses are written to the results array.
+ */
+#define DMMDZZ_SCAN_MAX_VALUE_SIZE  256
+
+typedef struct _DMMDZZ_SCAN_REQUEST {
+    /* In  */
+    HANDLE    ProcessId;
+    SIZE_T    ValueSize;                   /* size of search value (bytes)  */
+    ULONG     ValueOffset;                 /* offset to value in buffer     */
+    ULONG     MaxResults;                  /* max addresses to return       */
+    ULONG     ResultsOffset;               /* offset to results array       */
+    /* Out */
+    DMMDZZ_STATUS Hdr;
+    ULONG     ResultsCount;                /* actual matches found          */
+} DMMDZZ_SCAN_REQUEST, *PDMMDZZ_SCAN_REQUEST;
 
 #endif /* _DRIVER_H_ */
