@@ -19,6 +19,7 @@
 
 #include <windows.h>
 #include <string>
+#include <vector>
 #include <cstdint>
 #include "../driver/driver.h"
 
@@ -32,12 +33,12 @@ public:
     DriverCtl(const DriverCtl&)            = delete;
     DriverCtl& operator=(const DriverCtl&) = delete;
 
-    // Open \\.\dmmdzz_injector. Throws std::runtime_error on failure.
-    void Open(const std::wstring& deviceName = L"\\\\.\\dmmdzz_injector");
+    // Open the driver device. Throws std::runtime_error on failure.
+    void Open(const std::wstring& deviceName = WIN32_DEVICE_PATH);
 
     // Try to open the device. Returns true on success, false if the
     // device doesn't exist (driver not loaded yet). Does not throw.
-    bool TryOpen(const std::wstring& deviceName = L"\\\\.\\dmmdzz_injector");
+    bool TryOpen(const std::wstring& deviceName = WIN32_DEVICE_PATH);
 
     void Close();
     bool IsOpen() const { return hDevice_ != INVALID_HANDLE_VALUE; }
@@ -76,7 +77,32 @@ public:
     // maxResults caps the number of matches returned.
     void ScanMemory(uint32_t pid, const void* value, size_t valueSize,
                     std::vector<uintptr_t>& outAddrs,
-                    size_t maxResults = 100000);
+                    size_t maxResults = 50000);
+
+    // Enumerate all loaded modules of a process by walking the PEB LDR list.
+    // The driver attaches to the target process and walks InLoadOrderModuleList.
+    void EnumModules(uint32_t pid,
+                     std::vector<DMMDZZ_MODULE_ENTRY>& outModules,
+                     ULONG maxModules = 512);
+
+    // Multi-level pointer chain scan. Given a dynamic target address, finds
+    // pointer chains that lead back to it (up to maxDepth hops). Chains whose
+    // base falls within one of moduleRanges are marked IsStatic.
+    void PtrScan(uint32_t pid,
+                 uintptr_t targetAddress,
+                 ULONG maxDepth,
+                 const std::vector<DMMDZZ_MODULE_RANGE>& moduleRanges,
+                 std::vector<DMMDZZ_PTR_CHAIN>& outChains,
+                 ULONG maxChains = 1000);
+
+    // DKOM: hide a process by unlinking it from ActiveProcessLinks.
+    // After this, task manager / NtQuerySystemInformation won't list it.
+    // The driver can still R/W its memory (PID lookup uses the CID table).
+    // Only one process may be hidden at a time. Returns EPROCESS VA.
+    uintptr_t HideProcess(uint32_t pid);
+
+    // Restore a previously hidden process back into the list.
+    void UnhideProcess();
 
 private:
     HANDLE hDevice_ = INVALID_HANDLE_VALUE;

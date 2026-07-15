@@ -38,16 +38,15 @@ std::wstring DriverLoader::FindSysPath() const
     else
         dir = L".\\";
 
-    // Build the .sys path: <dir>dmmdzz_injector.sys
-    std::wstring sysPath = dir + L"dmmdzz_injector.sys";
+    // Build the .sys path: <dir><DRIVER_SYS_FILE>
+    std::wstring sysPath = dir + DRIVER_SYS_FILE;
 
     // Check existence
     DWORD attr = GetFileAttributesW(sysPath.c_str());
     if (attr == INVALID_FILE_ATTRIBUTES)
         throw std::runtime_error(
             "Driver file not found: " +
-            std::string(sysPath.begin(), sysPath.end()) +
-            "\n  Place dmmdzz_injector.sys in the same directory as dmmdzz_ctl.exe");
+            std::string(sysPath.begin(), sysPath.end()));
 
     return sysPath;
 }

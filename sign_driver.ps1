@@ -21,7 +21,10 @@ if (-not ([Security.Principal.WindowsPrincipal] `
 
 $ErrorActionPreference = "Stop"
 $ProjectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-$SysFile     = Join-Path $ProjectRoot "build_driver\dmmdzz_injector.sys"
+$SysFiles   = @(
+    Join-Path $ProjectRoot "build_driver\dmmdzz_injector.sys",
+    Join-Path $ProjectRoot "build_driver\dmmdzz_injector_kdu.sys"
+)
 $CertName    = "dmmdzz_test_cert"
 $CertFile    = Join-Path $ProjectRoot "build_driver\$CertName.cer"
 $PfxFile     = Join-Path $ProjectRoot "build_driver\$CertName.pfx"
@@ -32,12 +35,14 @@ Write-Host "=== dmmdzz_injector - Driver Self-Signing Tool ===" -ForegroundColor
 Write-Host ""
 
 # --- 1. Check .sys exists ---
-if (-not (Test-Path $SysFile)) {
-    Write-Host "[!] $SysFile not found. Build the driver first (build_driver.ps1)." -ForegroundColor Red
-    Read-Host "Press Enter to exit"
-    exit 1
+foreach ($f in $SysFiles) {
+    if (-not (Test-Path $f)) {
+        Write-Host "[!] $f not found. Build the driver first (build_driver.ps1)." -ForegroundColor Red
+        Read-Host "Press Enter to exit"
+        exit 1
+    }
+    Write-Host "[+] Driver: $f" -ForegroundColor Green
 }
-Write-Host "[+] Driver: $SysFile" -ForegroundColor Green
 
 # --- 2. Find signtool.exe ---
 Write-Host "[*] Locating signtool.exe..."
@@ -130,24 +135,26 @@ $pubStore.Add($cert)
 $pubStore.Close()
 Write-Host "[+] Installed to Trusted Publisher." -ForegroundColor Green
 
-# --- 6. Sign the driver ---
-Write-Host "[*] Signing driver..."
-$signArgs = @(
-    "sign",
-    "/f", $PfxFile,
-    "/p", $CertPass,
-    "/fd", "SHA256",
-    "/tr", "http://timestamp.digicert.com",
-    "/td", "SHA256",
-    "/v",
-    $SysFile
-)
-& $SignTool $signArgs
+# --- 6. Sign the drivers ---
+foreach ($f in $SysFiles) {
+    Write-Host "[*] Signing $f ..."
+    $signArgs = @(
+        "sign",
+        "/f", $PfxFile,
+        "/p", $CertPass,
+        "/fd", "SHA256",
+        "/tr", "http://timestamp.digicert.com",
+        "/td", "SHA256",
+        "/v",
+        $f
+    )
+    & $SignTool $signArgs
 
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "[!] signtool failed with exit code $LASTEXITCODE" -ForegroundColor Red
-    Read-Host "Press Enter to exit"
-    exit 1
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "[!] signtool failed for $f with exit code $LASTEXITCODE" -ForegroundColor Red
+        Read-Host "Press Enter to exit"
+        exit 1
+    }
 }
 
 Write-Host ""

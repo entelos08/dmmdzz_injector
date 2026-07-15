@@ -13,9 +13,19 @@
  *  * This driver performs NO hardware access; it is purely a software
  *    in-memory learning vehicle.
  *
- *  IMPORTANT: This source is written against the WDK. On Linux there is no
- *  WDK; build the driver on Windows with Visual Studio + WDK, then sign it
- *  with a test certificate (or enable TESTSIGNING on the target machine).
+ *  KDU MODE (DMMDZZ_KDU_MODE):
+ *  ---------------------------
+ *  When loaded via KDU (manual mapping), the DriverObject provided by KDU
+ *  may not be fully compatible with IoCreateDevice on all Windows versions.
+ *  To work around this, DriverEntry acts as a trampoline that calls
+ *  IoCreateDriver() — an exported but undocumented ntoskrnl API — to create
+ *  a brand new, kernel-managed DriverObject. The real initialization then
+ *  runs with this proper DriverObject, avoiding the crash in
+ *  IoCreateDevice -> ObfReferenceObject(NULL).
+ *
+ *  Build:
+ *    Normal:  cl.exe ...                          -> dmmdzz_injector.sys
+ *    KDU:     cl.exe ... /DDMMDZZ_KDU_MODE ...    -> dmmdzz_injector_kdu.sys
  * ============================================================================= */
 #include "driver.h"
 
@@ -26,19 +36,30 @@ DRIVER_DISPATCH dmmdzz_DeviceControl;
 /* Forward decls from sibling translation units */
 NTSTATUS dmmdzz_HandleIoctl(PIRP Irp, PIO_STACK_LOCATION IoStack, ULONG OutLen);
 
+#ifdef DMMDZZ_KDU_MODE
+/*
+ * IoCreateDriver is exported by ntoskrnl but not declared in standard WDK
+ * headers (ntddk.h / ntifs.h). It creates a proper DRIVER_OBJECT via the
+ * object manager, inserts it into \Driver\<name>, and calls the provided
+ * initialization routine. This is the cleanest way to obtain a fully
+ * functional DriverObject when running under KDU's manual mapping.
+ */
+NTKERNELAPI NTSTATUS NTAPI IoCreateDriver(
+    IN PUNICODE_STRING DriverName,        /* optional, may be NULL */
+    IN PDRIVER_INITIALIZE InitializationFunction
+);
+#endif
+
 /* -------------------------------------------------------------------------
- * DriverEntry
+ * Shared initialization: create device, symbolic link, wire up dispatch.
+ * Called with a proper DriverObject (either from I/O Manager or IoCreateDriver).
  * ------------------------------------------------------------------------- */
-NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath)
+static NTSTATUS dmmdzz_Init(PDRIVER_OBJECT DriverObject)
 {
     NTSTATUS          status;
     UNICODE_STRING    devName;
     UNICODE_STRING    dosName;
     PDEVICE_OBJECT    devObj = NULL;
-
-    UNREFERENCED_PARAMETER(RegistryPath);
-
-    DbgPrint("[dmmdzz] DriverEntry\n");
 
     RtlInitUnicodeString(&devName, DEVICE_NAME);
 
@@ -54,7 +75,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath)
         &devObj);
 
     if (!NT_SUCCESS(status)) {
-        DbgPrint("[dmmdzz] IoCreateDevice failed 0x%08X\n", status);
+        DbgPrint(DMMDZZ_DBG_TAG " IoCreateDevice failed 0x%08X\n", status);
         return status;
     }
 
@@ -62,7 +83,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath)
     RtlInitUnicodeString(&dosName, DOS_DEVICE_NAME);
     status = IoCreateSymbolicLink(&dosName, &devName);
     if (!NT_SUCCESS(status)) {
-        DbgPrint("[dmmdzz] IoCreateSymbolicLink failed 0x%08X\n", status);
+        DbgPrint(DMMDZZ_DBG_TAG " IoCreateSymbolicLink failed 0x%08X\n", status);
         IoDeleteDevice(devObj);
         return status;
     }
@@ -77,9 +98,59 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath)
     devObj->Flags |= DO_BUFFERED_IO;
     devObj->Flags &= ~DO_DEVICE_INITIALIZING;
 
-    DbgPrint("[dmmdzz] DriverEntry OK\n");
+    DbgPrint(DMMDZZ_DBG_TAG " DriverEntry OK\n");
     return STATUS_SUCCESS;
 }
+
+/* -------------------------------------------------------------------------
+ * DriverEntry
+ *
+ * In KDU mode: trampoline that calls IoCreateDriver to get a proper
+ *              DriverObject, then calls dmmdzz_Init via dmmdzz_RealEntry.
+ * In normal mode: called directly by the I/O Manager with a valid DriverObject.
+ * ------------------------------------------------------------------------- */
+#ifdef DMMDZZ_KDU_MODE
+
+/* Real entry point called by IoCreateDriver with a kernel-managed DriverObject */
+static NTSTATUS dmmdzz_RealEntry(PDRIVER_OBJECT DriverObject,
+                                 PUNICODE_STRING RegistryPath)
+{
+    UNREFERENCED_PARAMETER(RegistryPath);
+    DbgPrint(DMMDZZ_DBG_TAG " RealEntry (via IoCreateDriver)\n");
+    return dmmdzz_Init(DriverObject);
+}
+
+/* KDU trampoline: KDU calls this with its manually-created DriverObject.
+ * We ignore it and create a fresh, proper DriverObject via IoCreateDriver. */
+NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject,
+                     PUNICODE_STRING RegistryPath)
+{
+    UNREFERENCED_PARAMETER(DriverObject);
+    UNREFERENCED_PARAMETER(RegistryPath);
+
+    DbgPrint(DMMDZZ_DBG_TAG " KDU mode: calling IoCreateDriver\n");
+
+    UNICODE_STRING driverName;
+    RtlInitUnicodeString(&driverName, DRIVER_OBJ_NAME);
+
+    NTSTATUS status = IoCreateDriver(&driverName, dmmdzz_RealEntry);
+    if (!NT_SUCCESS(status)) {
+        DbgPrint(DMMDZZ_DBG_TAG " IoCreateDriver failed 0x%08X\n", status);
+    }
+    return status;
+}
+
+#else /* !DMMDZZ_KDU_MODE — normal SCM/test-signing load */
+
+NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject,
+                     PUNICODE_STRING RegistryPath)
+{
+    UNREFERENCED_PARAMETER(RegistryPath);
+    DbgPrint(DMMDZZ_DBG_TAG " DriverEntry\n");
+    return dmmdzz_Init(DriverObject);
+}
+
+#endif /* DMMDZZ_KDU_MODE */
 
 /* -------------------------------------------------------------------------
  * Unload - tear down everything in reverse order
@@ -89,7 +160,7 @@ VOID dmmdzz_Unload(PDRIVER_OBJECT DriverObject)
     UNICODE_STRING dosName;
     PDEVICE_OBJECT dev, next;
 
-    DbgPrint("[dmmdzz] Unload\n");
+    DbgPrint(DMMDZZ_DBG_TAG " Unload\n");
 
     RtlInitUnicodeString(&dosName, DOS_DEVICE_NAME);
     IoDeleteSymbolicLink(&dosName);
@@ -99,7 +170,7 @@ VOID dmmdzz_Unload(PDRIVER_OBJECT DriverObject)
         IoDeleteDevice(dev);
     }
 
-    DbgPrint("[dmmdzz] Unload OK\n");
+    DbgPrint(DMMDZZ_DBG_TAG " Unload OK\n");
 }
 
 /* -------------------------------------------------------------------------

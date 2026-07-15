@@ -410,8 +410,11 @@ void Scanner::firstScan(DataType type, ScanOp op,
         // Kernel-side scan: driver attaches to pid_, enumerates regions,
         // and returns matching addresses. We do NOT need enumRegions() here
         // because the driver does its own ZwQueryVirtualMemory walk.
+        std::printf("[*] Using kernel driver scan (value=%zu bytes)\n",
+                    target.size());
         std::vector<uintptr_t> addrs;
         drv_.ScanMemory(pid_, target.data(), target.size(), addrs);
+        std::printf("[*] Driver returned %zu matches\n", addrs.size());
 
         // Build result entries. Since the driver only returns addresses where
         // the bytes exactly equal target, curValue is simply target itself.

@@ -36,12 +36,57 @@
  * Device + symbolic link names. These MUST match between driver and usermode.
  * \\Device\\<DeviceName>     - the device object created in the kernel
  * \\??\\<DosDeviceName>      - the Win32-visible symbolic link
+ *
+ * build_driver.ps1 generates driver_names.h with a random stem per build so
+ * that the .sys filename, device name, service name, etc. all differ between
+ * builds (defeats name/hash-based detection). If driver_names.h is not found
+ * (e.g. compiling without the build script), the original defaults are used.
  * ------------------------------------------------------------------------- */
-#define DEVICE_NAME     L"\\Device\\dmmdzz_injector"
-#define DOS_DEVICE_NAME L"\\??\\dmmdzz_injector"
+#if defined(__has_include)
+  #if __has_include("driver_names.h")
+    #include "driver_names.h"
+  #endif
+#endif
 
-/* Magic tag used by the test signing/SCM start path */
-#define DRIVER_SERVICE_NAME  "dmmdzz_injector"
+#ifndef DRIVER_STEM
+  #define DRIVER_STEM "dmmdzz_injector"
+#endif
+#ifndef DRIVER_SYS_FILE
+  #define DRIVER_SYS_FILE L"dmmdzz_injector.sys"
+#endif
+#ifndef DRIVER_SERVICE_NAME
+  #define DRIVER_SERVICE_NAME "dmmdzz_injector"
+#endif
+#ifndef DEVICE_NAME
+  #define DEVICE_NAME L"\\Device\\dmmdzz_injector"
+#endif
+#ifndef DOS_DEVICE_NAME
+  #define DOS_DEVICE_NAME L"\\??\\dmmdzz_injector"
+#endif
+#ifndef DRIVER_OBJ_NAME
+  #define DRIVER_OBJ_NAME L"\\Driver\\dmmdzz_injector"
+#endif
+#ifndef WIN32_DEVICE_PATH
+  #define WIN32_DEVICE_PATH L"\\\\.\\dmmdzz_injector"
+#endif
+
+/* -------------------------------------------------------------------------
+ * IOCTL device type, function-code base, and debug log tag. These are also
+ * overridable by driver_names.h so every build produces a driver with
+ * different IOCTL numeric codes and a different DbgPrint prefix string
+ * (defeats signature matching on both the .sys and the user-mode .exe,
+ * which share this header). When driver_names.h is absent the historical
+ * defaults are used.
+ * ------------------------------------------------------------------------- */
+#ifndef DMMDZZ_DEVICE_TYPE
+  #define DMMDZZ_DEVICE_TYPE  0x8000
+#endif
+#ifndef DMMDZZ_IOCTL_FUNC_BASE
+  #define DMMDZZ_IOCTL_FUNC_BASE 0x800
+#endif
+#ifndef DMMDZZ_DBG_TAG
+  #define DMMDZZ_DBG_TAG "[dmmdzz]"
+#endif
 
 /* -------------------------------------------------------------------------
  * IOCTL codes
@@ -53,15 +98,19 @@
  *
  * CTL_CODE(DeviceType, Function, Method, Access) is documented in the WDK.
  * ------------------------------------------------------------------------- */
-#define DMMDZZ_DEVICE_TYPE  0x8000
+/* NOTE: DMMDZZ_DEVICE_TYPE is defined above (overridable by driver_names.h). */
 
-#define IOCTL_DMMDZZ_GET_VERSION        CTL_CODE(DMMDZZ_DEVICE_TYPE, 0x800, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_DMMDZZ_FIND_PROCESS       CTL_CODE(DMMDZZ_DEVICE_TYPE, 0x801, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_DMMDZZ_ENUM_MODULE_BASE   CTL_CODE(DMMDZZ_DEVICE_TYPE, 0x802, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_DMMDZZ_READ_MEMORY        CTL_CODE(DMMDZZ_DEVICE_TYPE, 0x803, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_DMMDZZ_WRITE_MEMORY       CTL_CODE(DMMDZZ_DEVICE_TYPE, 0x804, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_DMMDZZ_QUERY_BASE         CTL_CODE(DMMDZZ_DEVICE_TYPE, 0x805, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_DMMDZZ_SCAN_MEMORY        CTL_CODE(DMMDZZ_DEVICE_TYPE, 0x806, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DMMDZZ_GET_VERSION        CTL_CODE(DMMDZZ_DEVICE_TYPE, DMMDZZ_IOCTL_FUNC_BASE + 0,  METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DMMDZZ_FIND_PROCESS       CTL_CODE(DMMDZZ_DEVICE_TYPE, DMMDZZ_IOCTL_FUNC_BASE + 1,  METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DMMDZZ_ENUM_MODULE_BASE   CTL_CODE(DMMDZZ_DEVICE_TYPE, DMMDZZ_IOCTL_FUNC_BASE + 2,  METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DMMDZZ_READ_MEMORY        CTL_CODE(DMMDZZ_DEVICE_TYPE, DMMDZZ_IOCTL_FUNC_BASE + 3,  METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DMMDZZ_WRITE_MEMORY       CTL_CODE(DMMDZZ_DEVICE_TYPE, DMMDZZ_IOCTL_FUNC_BASE + 4,  METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DMMDZZ_QUERY_BASE         CTL_CODE(DMMDZZ_DEVICE_TYPE, DMMDZZ_IOCTL_FUNC_BASE + 5,  METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DMMDZZ_SCAN_MEMORY        CTL_CODE(DMMDZZ_DEVICE_TYPE, DMMDZZ_IOCTL_FUNC_BASE + 6,  METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DMMDZZ_ENUM_MODULES       CTL_CODE(DMMDZZ_DEVICE_TYPE, DMMDZZ_IOCTL_FUNC_BASE + 7,  METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DMMDZZ_PTRSCAN            CTL_CODE(DMMDZZ_DEVICE_TYPE, DMMDZZ_IOCTL_FUNC_BASE + 8,  METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DMMDZZ_HIDE_PROCESS       CTL_CODE(DMMDZZ_DEVICE_TYPE, DMMDZZ_IOCTL_FUNC_BASE + 9,  METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DMMDZZ_UNHIDE_PROCESS     CTL_CODE(DMMDZZ_DEVICE_TYPE, DMMDZZ_IOCTL_FUNC_BASE + 10, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 /* -------------------------------------------------------------------------
  * Shared data structures
@@ -152,5 +201,90 @@ typedef struct _DMMDZZ_SCAN_REQUEST {
     DMMDZZ_STATUS Hdr;
     ULONG     ResultsCount;                /* actual matches found          */
 } DMMDZZ_SCAN_REQUEST, *PDMMDZZ_SCAN_REQUEST;
+
+/* IOCTL_DMMDZZ_ENUM_MODULES ----------------------------------------------- */
+/* Enumerate all loaded modules of a process by walking the PEB LDR list.
+ *
+ * Buffer layout (METHOD_BUFFERED):
+ *   [DMMDZZ_ENUM_MODULES header][DMMDZZ_MODULE_ENTRY Modules[]]
+ *
+ * The driver attaches to the target process, reads PEB->Ldr, and walks
+ * InLoadOrderModuleList to collect base/size/name of each loaded module.
+ */
+#define DMMDZZ_MAX_MODULE_NAME  64
+
+typedef struct _DMMDZZ_MODULE_ENTRY {
+    ULONG_PTR DllBase;
+    ULONG     SizeOfImage;
+    WCHAR     BaseDllName[DMMDZZ_MAX_MODULE_NAME];  /* null-terminated */
+} DMMDZZ_MODULE_ENTRY, *PDMMDZZ_MODULE_ENTRY;
+
+typedef struct _DMMDZZ_ENUM_MODULES {
+    /* In  */
+    HANDLE    ProcessId;
+    ULONG     MaxModules;       /* capacity of Modules[] array */
+    ULONG     ModulesOffset;    /* offset to Modules[] in buffer */
+    /* Out */
+    DMMDZZ_STATUS Hdr;
+    ULONG     ModuleCount;      /* actual number returned */
+} DMMDZZ_ENUM_MODULES, *PDMMDZZ_ENUM_MODULES;
+
+/* IOCTL_DMMDZZ_PTRSCAN ---------------------------------------------------- */
+/* Multi-level pointer chain scan. Given a dynamic address, finds pointer
+ * chains that lead back to a static module base.
+ *
+ * Buffer layout (METHOD_BUFFERED):
+ *   [DMMDZZ_PTRSCAN_REQUEST header][DMMDZZ_MODULE_RANGE[]][DMMDZZ_PTR_CHAIN[]]
+ *
+ * The driver does up to MaxDepth passes over process memory:
+ *   Pass 1: find all 8-byte values == TargetAddress  (level-1 pointers)
+ *   Pass 2: find all 8-byte values in level-1 set    (level-2 pointers)
+ *   Pass 3: find all 8-byte values in level-2 set    (level-3 pointers)
+ * Chains whose base falls within a module range are marked IsStatic.
+ */
+#define DMMDZZ_PTRSCAN_MAX_DEPTH  3
+
+typedef struct _DMMDZZ_MODULE_RANGE {
+    ULONG_PTR Base;
+    SIZE_T    Size;
+} DMMDZZ_MODULE_RANGE, *PDMMDZZ_MODULE_RANGE;
+
+typedef struct _DMMDZZ_PTR_CHAIN {
+    ULONG     Depth;            /* number of hops (1 = direct ptr to target) */
+    ULONG_PTR Addresses[DMMDZZ_PTRSCAN_MAX_DEPTH + 1]; /* [base,...,target] */
+    BOOLEAN   IsStatic;         /* base address is in a module range */
+} DMMDZZ_PTR_CHAIN, *PDMMDZZ_PTR_CHAIN;
+
+typedef struct _DMMDZZ_PTRSCAN_REQUEST {
+    /* In  */
+    HANDLE    ProcessId;
+    ULONG_PTR TargetAddress;
+    ULONG     MaxDepth;         /* 1..3 */
+    ULONG     MaxChains;        /* max chains to return */
+    ULONG     NumModuleRanges;  /* for static checking */
+    ULONG     ModuleRangesOffset;  /* offset to DMMDZZ_MODULE_RANGE[] */
+    ULONG     ResultsOffset;       /* offset to DMMDZZ_PTR_CHAIN[] */
+    /* Out */
+    DMMDZZ_STATUS Hdr;
+    ULONG     ChainCount;
+} DMMDZZ_PTRSCAN_REQUEST, *PDMMDZZ_PTRSCAN_REQUEST;
+
+/* IOCTL_DMMDZZ_HIDE_PROCESS / UNHIDE_PROCESS ------------------------------- */
+/* DKOM (Direct Kernel Object Manipulation): unlink the target process from
+ * the EPROCESS.ActiveProcessLinks list so NtQuerySystemInformation and the
+ * task manager no longer enumerate it. PsLookupProcessByProcessId still
+ * works (it uses the CID handle table, not the list), so memory R/W via
+ * the driver remains functional on a hidden process.
+ *
+ * The driver saves the original LIST_ENTRY so UNHIDE can restore it.
+ * Only ONE process may be hidden at a time (sufficient for hiding ctl.exe).
+ */
+typedef struct _DMMDZZ_HIDE_PROCESS {
+    /* In  */
+    HANDLE    ProcessId;            /* PID of process to hide/unhide */
+    /* Out */
+    DMMDZZ_STATUS Hdr;
+    ULONG_PTR EProcessVA;           /* EPROCESS VA for confirmation */
+} DMMDZZ_HIDE_PROCESS, *PDMMDZZ_HIDE_PROCESS;
 
 #endif /* _DRIVER_H_ */

@@ -1,0 +1,79 @@
+; =============================================================================
+; driver/6bb700b9.inf
+;
+; INF file used by the Windows PnP / Service Control Manager to install the
+; driver. This is the classic "root-enumerated" pattern: the device is not
+; real hardware; we install it via "pnputil" or the legacy "devcon" tool.
+;
+; EDUCATIONAL USE ONLY. On Windows 10/11 64-bit you must enable test signing:
+;     bcdedit /set testsigning on      (then reboot)
+; or sign the driver with a real EV certificate.
+; =============================================================================
+
+[Version]
+Signature   = "$Windows NT$"
+Class       = System
+ClassGuid   = {4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider    = %ProviderName%
+CatalogFile = 6bb700b9.cat
+DriverVer   = 01/01/2026,0.1.0.0
+PnpLockdown = 1
+
+[DestinationDirs]
+DefaultDestDir = 13            ; DriverStore
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+6bb700b9.sys = 1,,
+
+; -----------------------------------------------------------------------------
+; Manufacturer
+; -----------------------------------------------------------------------------
+[Manufacturer]
+%ProviderName% = Standard,NTamd64.10.0...22000
+
+[Standard.NTamd64.10.0...22000]
+%DeviceName% = DMMDZZ_Install, Root\6bb700b9
+
+; -----------------------------------------------------------------------------
+; Install section
+; -----------------------------------------------------------------------------
+[DMMDZZ_Install]
+CopyFiles  = Drivers_Dir
+
+[DMMDZZ_Install.HW]
+AddReg     = DMMDZZ_AddReg_HW
+
+[DMMDZZ_Install.Services]
+AddService = 6bb700b9,,DMMDZZ_Service_Inst
+
+[Drivers_Dir]
+6bb700b9.sys
+
+[DMMDZZ_AddReg_HW]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,6bb700b9.sys
+
+; -----------------------------------------------------------------------------
+; Service configuration
+; -----------------------------------------------------------------------------
+[DMMDZZ_Service_Inst]
+DisplayName    = %ServiceName%
+Description    = %ServiceDesc%
+ServiceType    = 1     ; SERVICE_KERNEL_DRIVER
+StartType      = 3     ; SERVICE_DEMAND_START
+ErrorControl   = 1     ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\6bb700b9.sys
+
+; -----------------------------------------------------------------------------
+; Strings
+; -----------------------------------------------------------------------------
+[Strings]
+ProviderName  = "Educational Kernel Learning"
+DiskName      = "6bb700b9 Installation Disk"
+DeviceName    = "6bb700b9 Educational Device"
+ServiceName   = "6bb700b9"
+ServiceDesc   = "Educational Windows kernel communication driver"
+

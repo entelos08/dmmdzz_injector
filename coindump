@@ -1,0 +1,1157 @@
+qntQL...OnButtonUp(bool)
+il2cpp:1286C530 sub_1286C530    proc near
+il2cpp:1286C530                 push    ebp
+il2cpp:1286C531                 mov     ebp, esp
+il2cpp:1286C533                 sub     esp, 6Ch
+il2cpp:1286C536                 cmp     byte_162A6E1A, 0
+il2cpp:1286C53D                 push    ebx
+il2cpp:1286C53E                 push    esi
+il2cpp:1286C53F                 push    edi
+il2cpp:1286C540                 jnz     short loc_1286C574
+il2cpp:1286C542                 push    offset dword_160BC200
+il2cpp:1286C547                 call    near ptr unk_10586F80
+il2cpp:1286C54C                 push    offset dword_160C1FD0
+il2cpp:1286C551                 call    near ptr unk_10586F80
+il2cpp:1286C556                 push    offset dword_160967C4
+il2cpp:1286C55B                 call    near ptr unk_10586F80
+il2cpp:1286C560                 push    offset dword_16045E38
+il2cpp:1286C565                 call    near ptr unk_10586F80
+il2cpp:1286C56A                 add     esp, 10h
+il2cpp:1286C56D                 mov     byte_162A6E1A, 1
+il2cpp:1286C574
+il2cpp:1286C574 loc_1286C574:                           ; CODE XREF: sub_1286C530+10↑j
+il2cpp:1286C574                 mov     ecx, dword_160967C4
+il2cpp:1286C57A                 test    byte ptr [ecx+2Fh], 20h
+il2cpp:1286C57E                 jz      short loc_1286C596
+il2cpp:1286C580                 mov     eax, [ecx+34h]
+il2cpp:1286C583                 push    ecx
+il2cpp:1286C584                 push    dword ptr [ebp+0Ch]
+il2cpp:1286C587                 push    dword ptr [ebp+8]
+il2cpp:1286C58A                 call    eax
+il2cpp:1286C58C                 add     esp, 0Ch
+il2cpp:1286C58F                 pop     edi
+il2cpp:1286C590                 pop     esi
+il2cpp:1286C591                 pop     ebx
+il2cpp:1286C592                 mov     esp, ebp
+il2cpp:1286C594                 pop     ebp
+il2cpp:1286C595                 retn
+il2cpp:1286C596 ; ---------------------------------------------------------------------------
+il2cpp:1286C596
+il2cpp:1286C596 loc_1286C596:                           ; CODE XREF: sub_1286C530+4E↑j
+il2cpp:1286C596                 mov     esi, [ebp+8]
+il2cpp:1286C599                 mov     eax, [esi+24h]
+il2cpp:1286C59C                 test    eax, eax
+il2cpp:1286C59E                 jz      loc_1286C91C
+il2cpp:1286C5A4                 cmp     dword ptr [eax+14h], 4
+il2cpp:1286C5A8                 jz      loc_1286C87D
+il2cpp:1286C5AE                 cmp     byte ptr [eax+0Ch], 1
+il2cpp:1286C5B2                 jnz     loc_1286C913
+il2cpp:1286C5B8                 push    0
+il2cpp:1286C5BA                 push    dword ptr [ebp+0Ch]
+il2cpp:1286C5BD                 push    esi
+il2cpp:1286C5BE                 call    near ptr unk_1286CF70
+il2cpp:1286C5C3                 mov     bl, al
+il2cpp:1286C5C5                 add     esp, 0Ch
+il2cpp:1286C5C8                 test    bl, bl
+il2cpp:1286C5CA                 jnz     loc_1286C6D3
+il2cpp:1286C5D0                 cmp     byte_162A6E16, al
+il2cpp:1286C5D6                 jnz     short loc_1286C5F6
+il2cpp:1286C5D8                 push    offset dword_16097728
+il2cpp:1286C5DD                 call    near ptr unk_10586F80
+il2cpp:1286C5E2                 push    offset dword_1603D520
+il2cpp:1286C5E7                 call    near ptr unk_10586F80
+il2cpp:1286C5EC                 add     esp, 8
+il2cpp:1286C5EF                 mov     byte_162A6E16, 1
+il2cpp:1286C5F6
+il2cpp:1286C5F6 loc_1286C5F6:                           ; CODE XREF: sub_1286C530+A6↑j
+il2cpp:1286C5F6                 mov     eax, dword_16097728
+il2cpp:1286C5FB                 test    byte ptr [eax+2Fh], 20h
+il2cpp:1286C5FF                 jz      short loc_1286C612
+il2cpp:1286C601                 push    eax
+il2cpp:1286C602                 mov     eax, [eax+34h]
+il2cpp:1286C605                 push    esi
+il2cpp:1286C606                 call    eax
+il2cpp:1286C608                 add     esp, 8
+il2cpp:1286C60B                 xor     bl, bl
+il2cpp:1286C60D                 jmp     loc_1286C855
+il2cpp:1286C612 ; ---------------------------------------------------------------------------
+il2cpp:1286C612
+il2cpp:1286C612 loc_1286C612:                           ; CODE XREF: sub_1286C530+CF↑j
+il2cpp:1286C612                 cmp     byte_162A6F4A, 0
+il2cpp:1286C619                 jnz     short loc_1286C62F
+il2cpp:1286C61B                 push    offset dword_16098B2C
+il2cpp:1286C620                 call    near ptr unk_10586F80
+il2cpp:1286C625                 add     esp, 4
+il2cpp:1286C628                 mov     byte_162A6F4A, 1
+il2cpp:1286C62F
+il2cpp:1286C62F loc_1286C62F:                           ; CODE XREF: sub_1286C530+E9↑j
+il2cpp:1286C62F                 mov     ecx, dword_16098B2C
+il2cpp:1286C635                 test    byte ptr [ecx+2Fh], 20h
+il2cpp:1286C639                 jz      short loc_1286C649
+il2cpp:1286C63B                 mov     eax, [ecx+34h]
+il2cpp:1286C63E                 push    ecx
+il2cpp:1286C63F                 push    esi
+il2cpp:1286C640                 call    eax
+il2cpp:1286C642                 add     esp, 8
+il2cpp:1286C645                 mov     edi, eax
+il2cpp:1286C647                 jmp     short loc_1286C64C
+il2cpp:1286C649 ; ---------------------------------------------------------------------------
+il2cpp:1286C649
+il2cpp:1286C649 loc_1286C649:                           ; CODE XREF: sub_1286C530+109↑j
+il2cpp:1286C649                 mov     edi, [esi+38h]
+il2cpp:1286C64C
+il2cpp:1286C64C loc_1286C64C:                           ; CODE XREF: sub_1286C530+117↑j
+il2cpp:1286C64C                 test    edi, edi
+il2cpp:1286C64E                 jz      loc_1286C91C
+il2cpp:1286C654                 cmp     byte_1628B7C5, 0
+il2cpp:1286C65B                 jnz     short loc_1286C671
+il2cpp:1286C65D                 push    offset dword_160F26F4
+il2cpp:1286C662                 call    near ptr unk_10586F80
+il2cpp:1286C667                 add     esp, 4
+il2cpp:1286C66A                 mov     byte_1628B7C5, 1
+il2cpp:1286C671
+il2cpp:1286C671 loc_1286C671:                           ; CODE XREF: sub_1286C530+12B↑j
+il2cpp:1286C671                 mov     ecx, dword_160F26F4
+il2cpp:1286C677                 test    byte ptr [ecx+2Fh], 20h
+il2cpp:1286C67B                 jz      short loc_1286C689
+il2cpp:1286C67D                 mov     eax, [ecx+34h]
+il2cpp:1286C680                 push    ecx
+il2cpp:1286C681                 push    edi
+il2cpp:1286C682                 call    eax
+il2cpp:1286C684                 add     esp, 8
+il2cpp:1286C687                 jmp     short loc_1286C693
+il2cpp:1286C689 ; ---------------------------------------------------------------------------
+il2cpp:1286C689
+il2cpp:1286C689 loc_1286C689:                           ; CODE XREF: sub_1286C530+14B↑j
+il2cpp:1286C689                 cmp     dword ptr [edi+340h], 0
+il2cpp:1286C690                 setz    al
+il2cpp:1286C693
+il2cpp:1286C693 loc_1286C693:                           ; CODE XREF: sub_1286C530+157↑j
+il2cpp:1286C693                 test    al, al
+il2cpp:1286C695                 jz      short loc_1286C6CC
+il2cpp:1286C697                 push    0
+il2cpp:1286C699                 push    esi
+il2cpp:1286C69A                 call    near ptr unk_1286D820
+il2cpp:1286C69F                 add     esp, 8
+il2cpp:1286C6A2                 test    al, al
+il2cpp:1286C6A4                 jz      short loc_1286C6CC
+il2cpp:1286C6A6                 mov     eax, dword_1603D520
+il2cpp:1286C6AB                 mov     eax, [eax+5Ch]
+il2cpp:1286C6AE                 mov     edi, [eax+4]
+il2cpp:1286C6B1                 test    edi, edi
+il2cpp:1286C6B3                 jz      short loc_1286C6CC
+il2cpp:1286C6B5                 push    0
+il2cpp:1286C6B7                 push    esi
+il2cpp:1286C6B8                 call    near ptr unk_119AD4E0
+il2cpp:1286C6BD                 push    dword ptr [edi+14h]
+il2cpp:1286C6C0                 push    eax
+il2cpp:1286C6C1                 push    dword ptr [edi+20h]
+il2cpp:1286C6C4                 mov     eax, [edi+0Ch]
+il2cpp:1286C6C7                 call    eax
+il2cpp:1286C6C9                 add     esp, 14h
+il2cpp:1286C6CC
+il2cpp:1286C6CC loc_1286C6CC:                           ; CODE XREF: sub_1286C530+165↑j
+il2cpp:1286C6CC                                         ; sub_1286C530+174↑j ...
+il2cpp:1286C6CC                 xor     bl, bl
+il2cpp:1286C6CE                 jmp     loc_1286C855
+il2cpp:1286C6D3 ; ---------------------------------------------------------------------------
+il2cpp:1286C6D3
+il2cpp:1286C6D3 loc_1286C6D3:                           ; CODE XREF: sub_1286C530+9A↑j
+il2cpp:1286C6D3                 push    0
+il2cpp:1286C6D5                 lea     eax, [ebp-6Ch]
+il2cpp:1286C6D8                 push    esi
+il2cpp:1286C6D9                 push    eax
+il2cpp:1286C6DA                 call    near ptr unk_1286D5A0
+il2cpp:1286C6DF                 add     esp, 0Ch
+il2cpp:1286C6E2                 movups  xmm0, xmmword ptr [eax]
+il2cpp:1286C6E5                 push    0
+il2cpp:1286C6E7                 sub     esp, 30h
+il2cpp:1286C6EA                 mov     ecx, esp
+il2cpp:1286C6EC                 push    esi
+il2cpp:1286C6ED                 movups  xmmword ptr [ecx], xmm0
+il2cpp:1286C6F0                 movups  xmm0, xmmword ptr [eax+10h]
+il2cpp:1286C6F4                 movups  xmmword ptr [ecx+10h], xmm0
+il2cpp:1286C6F8                 movups  xmm0, xmmword ptr [eax+20h]
+il2cpp:1286C6FC                 movups  xmmword ptr [ecx+20h], xmm0
+il2cpp:1286C700                 call    near ptr unk_1286E130
+il2cpp:1286C705                 push    0
+il2cpp:1286C707                 push    esi
+il2cpp:1286C708                 call    near ptr unk_1284F490
+il2cpp:1286C70D                 add     esp, 40h
+il2cpp:1286C710                 test    eax, eax
+il2cpp:1286C712                 jz      loc_1286C91C
+il2cpp:1286C718                 mov     ecx, [eax]
+il2cpp:1286C71A                 push    dword ptr [ecx+1E4h]
+il2cpp:1286C720                 mov     edx, [ecx+1E0h]
+il2cpp:1286C726                 push    eax
+il2cpp:1286C727                 call    edx
+il2cpp:1286C729                 mov     edi, eax
+il2cpp:1286C72B                 add     esp, 8
+il2cpp:1286C72E                 mov     eax, [esi+24h]
+il2cpp:1286C731                 test    eax, eax
+il2cpp:1286C733                 jz      loc_1286C91C
+il2cpp:1286C739                 mov     eax, [eax+8]
+il2cpp:1286C73C                 movq    xmm0, qword ptr [esi+4Ch]
+il2cpp:1286C741                 push    0
+il2cpp:1286C743                 sub     esp, 0Ch
+il2cpp:1286C746                 mov     [ebp-10h], eax
+il2cpp:1286C749                 mov     eax, [esi+54h]
+il2cpp:1286C74C                 mov     ecx, esp
+il2cpp:1286C74E                 movq    qword ptr [ecx], xmm0
+il2cpp:1286C752                 mov     [ecx+8], eax
+il2cpp:1286C755                 lea     eax, [ebp-28h]
+il2cpp:1286C758                 push    eax
+il2cpp:1286C759                 call    near ptr unk_11E3EF30
+il2cpp:1286C75E                 push    0
+il2cpp:1286C760                 movq    xmm0, qword ptr [eax]
+il2cpp:1286C764                 mov     eax, [eax+8]
+il2cpp:1286C767                 mov     [ebp-0Ch], eax
+il2cpp:1286C76A                 lea     eax, [ebp-1Ch]
+il2cpp:1286C76D                 push    eax
+il2cpp:1286C76E                 movq    qword ptr [ebp-30h], xmm0
+il2cpp:1286C773                 call    near ptr unk_12D96F90
+il2cpp:1286C778                 add     esp, 1Ch
+il2cpp:1286C77B                 movq    xmm0, qword ptr [eax]
+il2cpp:1286C77F                 mov     eax, [eax+8]
+il2cpp:1286C782                 push    0
+il2cpp:1286C784                 sub     esp, 0Ch
+il2cpp:1286C787                 movq    qword ptr [ebp-24h], xmm0
+il2cpp:1286C78C                 movq    xmm0, qword ptr [esi+58h]
+il2cpp:1286C791                 mov     ecx, esp
+il2cpp:1286C793                 mov     [ebp-8], eax
+il2cpp:1286C796                 mov     eax, [esi+60h]
+il2cpp:1286C799                 movq    qword ptr [ecx], xmm0
+il2cpp:1286C79D                 mov     [ecx+8], eax
+il2cpp:1286C7A0                 lea     eax, [ebp-3Ch]
+il2cpp:1286C7A3                 push    eax
+il2cpp:1286C7A4                 call    near ptr unk_11E3EF30
+il2cpp:1286C7A9                 add     esp, 14h
+il2cpp:1286C7AC                 movq    xmm0, qword ptr [eax]
+il2cpp:1286C7B0                 mov     eax, [eax+8]
+il2cpp:1286C7B3                 push    0
+il2cpp:1286C7B5                 sub     esp, 0Ch
+il2cpp:1286C7B8                 movq    qword ptr [ebp-18h], xmm0
+il2cpp:1286C7BD                 movq    xmm0, qword ptr [esi+64h]
+il2cpp:1286C7C2                 mov     ecx, esp
+il2cpp:1286C7C4                 mov     [ebp-4], eax
+il2cpp:1286C7C7                 mov     eax, [esi+6Ch]
+il2cpp:1286C7CA                 movq    qword ptr [ecx], xmm0
+il2cpp:1286C7CE                 mov     [ecx+8], eax
+il2cpp:1286C7D1                 lea     eax, [ebp-3Ch]
+il2cpp:1286C7D4                 push    eax
+il2cpp:1286C7D5                 call    near ptr unk_11E3EF30
+il2cpp:1286C7DA                 mov     ecx, [esi+24h]
+il2cpp:1286C7DD                 add     esp, 14h
+il2cpp:1286C7E0                 test    ecx, ecx
+il2cpp:1286C7E2                 jz      loc_1286C91C
+il2cpp:1286C7E8                 test    edi, edi
+il2cpp:1286C7EA                 jz      loc_1286C91C
+il2cpp:1286C7F0                 movzx   ecx, byte ptr [ecx+30h]
+il2cpp:1286C7F4                 movq    xmm0, qword ptr [eax]
+il2cpp:1286C7F8                 mov     eax, [eax+8]
+il2cpp:1286C7FB                 push    0
+il2cpp:1286C7FD                 push    ecx
+il2cpp:1286C7FE                 push    dword ptr [esi+70h]
+il2cpp:1286C801                 sub     esp, 0Ch
+il2cpp:1286C804                 mov     ecx, esp
+il2cpp:1286C806                 sub     esp, 0Ch
+il2cpp:1286C809                 movq    qword ptr [ecx], xmm0
+il2cpp:1286C80D                 movq    xmm0, qword ptr [ebp-18h]
+il2cpp:1286C812                 mov     [ecx+8], eax
+il2cpp:1286C815                 mov     eax, esp
+il2cpp:1286C817                 mov     ecx, [ebp-4]
+il2cpp:1286C81A                 sub     esp, 0Ch
+il2cpp:1286C81D                 movq    qword ptr [eax], xmm0
+il2cpp:1286C821                 movq    xmm0, qword ptr [ebp-24h]
+il2cpp:1286C826                 mov     [eax+8], ecx
+il2cpp:1286C829                 mov     eax, esp
+il2cpp:1286C82B                 mov     ecx, [ebp-8]
+il2cpp:1286C82E                 sub     esp, 0Ch
+il2cpp:1286C831                 movq    qword ptr [eax], xmm0
+il2cpp:1286C835                 movq    xmm0, qword ptr [ebp-30h]
+il2cpp:1286C83A                 mov     [eax+8], ecx
+il2cpp:1286C83D                 mov     eax, esp
+il2cpp:1286C83F                 push    dword ptr [ebp-10h]
+il2cpp:1286C842                 mov     ecx, [ebp-0Ch]
+il2cpp:1286C845                 push    edi
+il2cpp:1286C846                 movq    qword ptr [eax], xmm0
+il2cpp:1286C84A                 mov     [eax+8], ecx
+il2cpp:1286C84D                 call    near ptr unk_12663940
+il2cpp:1286C852                 add     esp, 44h
+il2cpp:1286C855
+il2cpp:1286C855 loc_1286C855:                           ; CODE XREF: sub_1286C530+DD↑j
+il2cpp:1286C855                                         ; sub_1286C530+19E↑j
+il2cpp:1286C855                 mov     eax, dword_16045E38
+il2cpp:1286C85A                 mov     ecx, [eax+5Ch]
+il2cpp:1286C85D                 mov     eax, [ecx]
+il2cpp:1286C85F                 test    eax, eax
+il2cpp:1286C861                 jz      loc_1286C91C
+il2cpp:1286C867                 push    0
+il2cpp:1286C869                 push    0
+il2cpp:1286C86B                 push    eax
+il2cpp:1286C86C                 call    near ptr unk_1245AC90
+il2cpp:1286C871                 add     esp, 0Ch
+il2cpp:1286C874                 mov     al, bl
+il2cpp:1286C876                 pop     edi
+il2cpp:1286C877                 pop     esi
+il2cpp:1286C878                 pop     ebx
+il2cpp:1286C879                 mov     esp, ebp
+il2cpp:1286C87B                 pop     ebp
+il2cpp:1286C87C                 retn
+il2cpp:1286C87D ; ---------------------------------------------------------------------------
+il2cpp:1286C87D
+il2cpp:1286C87D loc_1286C87D:                           ; CODE XREF: sub_1286C530+78↑j
+il2cpp:1286C87D                 cmp     byte_162A6F50, 0
+il2cpp:1286C884                 jnz     short loc_1286C89A
+il2cpp:1286C886                 push    offset dword_160992DC
+il2cpp:1286C88B                 call    near ptr unk_10586F80
+il2cpp:1286C890                 add     esp, 4
+il2cpp:1286C893                 mov     byte_162A6F50, 1
+il2cpp:1286C89A
+il2cpp:1286C89A loc_1286C89A:                           ; CODE XREF: sub_1286C530+354↑j
+il2cpp:1286C89A                 mov     ecx, dword_160992DC
+il2cpp:1286C8A0                 test    byte ptr [ecx+2Fh], 20h
+il2cpp:1286C8A4                 jz      short loc_1286C8B2
+il2cpp:1286C8A6                 mov     eax, [ecx+34h]
+il2cpp:1286C8A9                 push    ecx
+il2cpp:1286C8AA                 push    esi
+il2cpp:1286C8AB                 call    eax
+il2cpp:1286C8AD                 add     esp, 8
+il2cpp:1286C8B0                 jmp     short loc_1286C8B5
+il2cpp:1286C8B2 ; ---------------------------------------------------------------------------
+il2cpp:1286C8B2
+il2cpp:1286C8B2 loc_1286C8B2:                           ; CODE XREF: sub_1286C530+374↑j
+il2cpp:1286C8B2                 mov     eax, [esi+34h]
+il2cpp:1286C8B5
+il2cpp:1286C8B5 loc_1286C8B5:                           ; CODE XREF: sub_1286C530+380↑j
+il2cpp:1286C8B5                 push    0
+il2cpp:1286C8B7                 push    esi
+il2cpp:1286C8B8                 test    eax, eax
+il2cpp:1286C8BA                 jz      short loc_1286C8E3
+il2cpp:1286C8BC                 call    near ptr unk_1284F4D0
+il2cpp:1286C8C1                 add     esp, 8
+il2cpp:1286C8C4                 test    eax, eax
+il2cpp:1286C8C6                 jz      short loc_1286C91C
+il2cpp:1286C8C8                 mov     ebx, [ebp+0Ch]
+il2cpp:1286C8CB                 push    0
+il2cpp:1286C8CD                 push    ebx
+il2cpp:1286C8CE                 push    eax
+il2cpp:1286C8CF                 call    near ptr unk_11F53500
+il2cpp:1286C8D4                 add     esp, 0Ch
+il2cpp:1286C8D7                 xor     bl, 1
+il2cpp:1286C8DA                 mov     al, bl
+il2cpp:1286C8DC                 pop     edi
+il2cpp:1286C8DD                 pop     esi
+il2cpp:1286C8DE                 pop     ebx
+il2cpp:1286C8DF                 mov     esp, ebp
+il2cpp:1286C8E1                 pop     ebp
+il2cpp:1286C8E2                 retn
+il2cpp:1286C8E3 ; ---------------------------------------------------------------------------
+il2cpp:1286C8E3
+il2cpp:1286C8E3 loc_1286C8E3:                           ; CODE XREF: sub_1286C530+38A↑j
+il2cpp:1286C8E3                 call    near ptr unk_119AD4E0
+il2cpp:1286C8E8                 mov     [ebp-10h], eax
+il2cpp:1286C8EB                 lea     eax, [ebp-10h]
+il2cpp:1286C8EE                 push    eax
+il2cpp:1286C8EF                 push    dword_160BC200
+il2cpp:1286C8F5                 call    near ptr il2cpp_value_box
+il2cpp:1286C8FA                 push    0
+il2cpp:1286C8FC                 push    eax
+il2cpp:1286C8FD                 push    dword_160C1FD0
+il2cpp:1286C903                 call    near ptr unk_14338EA0
+il2cpp:1286C908                 push    0
+il2cpp:1286C90A                 push    eax
+il2cpp:1286C90B                 call    near ptr unk_12D5BEE0
+il2cpp:1286C910                 add     esp, 24h
+il2cpp:1286C913
+il2cpp:1286C913 loc_1286C913:                           ; CODE XREF: sub_1286C530+82↑j
+il2cpp:1286C913                 pop     edi
+il2cpp:1286C914                 pop     esi
+il2cpp:1286C915                 xor     al, al
+il2cpp:1286C917                 pop     ebx
+il2cpp:1286C918                 mov     esp, ebp
+il2cpp:1286C91A                 pop     ebp
+il2cpp:1286C91B                 retn
+il2cpp:1286C91C ; ---------------------------------------------------------------------------
+il2cpp:1286C91C
+il2cpp:1286C91C loc_1286C91C:                           ; CODE XREF: sub_1286C530+6E↑j
+il2cpp:1286C91C                                         ; sub_1286C530+11E↑j ...
+il2cpp:1286C91C                 call    near ptr unk_10587220
+il2cpp:1286C91C sub_1286C530    endp
+il2cpp:1286C91C
+il2cpp:1286C91C ; -----------------------------
+
+
+qntQL...vNolvNIB...(V3,V3,V3,CachedBuf<int>)
+il2cpp:12870500                 push    ebp
+il2cpp:12870501                 mov     ebp, esp
+il2cpp:12870503                 cmp     byte_162A6DF3, 0
+il2cpp:1287050A                 push    ebx
+il2cpp:1287050B                 push    esi
+il2cpp:1287050C                 push    edi
+il2cpp:1287050D                 jnz     short loc_12870523
+il2cpp:1287050F                 push    offset dword_1609BC68
+il2cpp:12870514                 call    near ptr unk_10586F80
+il2cpp:12870519                 add     esp, 4
+il2cpp:1287051C                 mov     byte_162A6DF3, 1
+il2cpp:12870523
+il2cpp:12870523 loc_12870523:                           ; CODE XREF: il2cpp:1287050D↑j
+il2cpp:12870523                 mov     edx, dword_1609BC68
+il2cpp:12870529                 test    byte ptr [edx+2Fh], 20h
+il2cpp:1287052D                 jz      short loc_1287057F
+il2cpp:1287052F                 movq    xmm0, qword ptr [ebp+24h]
+il2cpp:12870534                 mov     eax, [ebp+2Ch]
+il2cpp:12870537                 push    edx
+il2cpp:12870538                 push    dword ptr [ebp+30h]
+il2cpp:1287053B                 sub     esp, 0Ch
+il2cpp:1287053E                 mov     ecx, esp
+il2cpp:12870540                 sub     esp, 0Ch
+il2cpp:12870543                 movq    qword ptr [ecx], xmm0
+il2cpp:12870547                 movq    xmm0, qword ptr [ebp+18h]
+il2cpp:1287054C                 mov     [ecx+8], eax
+il2cpp:1287054F                 mov     ecx, esp
+il2cpp:12870551                 mov     eax, [ebp+20h]
+il2cpp:12870554                 sub     esp, 0Ch
+il2cpp:12870557                 movq    qword ptr [ecx], xmm0
+il2cpp:1287055B                 movq    xmm0, qword ptr [ebp+0Ch]
+il2cpp:12870560                 mov     [ecx+8], eax
+il2cpp:12870563                 mov     ecx, esp
+il2cpp:12870565                 mov     eax, [ebp+14h]
+il2cpp:12870568                 push    dword ptr [ebp+8]
+il2cpp:1287056B                 movq    qword ptr [ecx], xmm0
+il2cpp:1287056F                 mov     [ecx+8], eax
+il2cpp:12870572                 mov     eax, [edx+34h]
+il2cpp:12870575                 call    eax
+il2cpp:12870577                 add     esp, 30h
+il2cpp:1287057A
+il2cpp:1287057A loc_1287057A:                           ; CODE XREF: il2cpp:128706BB↓j
+il2cpp:1287057A                                         ; il2cpp:12870856↓j
+il2cpp:1287057A                 pop     edi
+il2cpp:1287057B                 pop     esi
+il2cpp:1287057C                 pop     ebx
+il2cpp:1287057D                 pop     ebp
+il2cpp:1287057E                 retn
+il2cpp:1287057F ; ---------------------------------------------------------------------------
+il2cpp:1287057F
+il2cpp:1287057F loc_1287057F:                           ; CODE XREF: il2cpp:1287052D↑j
+il2cpp:1287057F                 mov     esi, [ebp+8]
+il2cpp:12870582                 cmp     dword ptr [esi+48h], 0FFFFFFFFh
+il2cpp:12870586                 jz      loc_12870625
+il2cpp:1287058C                 cmp     byte_162A6F4A, 0
+il2cpp:12870593                 jnz     short loc_128705A9
+il2cpp:12870595                 push    offset dword_16098B2C
+il2cpp:1287059A                 call    near ptr unk_10586F80
+il2cpp:1287059F                 add     esp, 4
+il2cpp:128705A2                 mov     byte_162A6F4A, 1
+il2cpp:128705A9
+il2cpp:128705A9 loc_128705A9:                           ; CODE XREF: il2cpp:12870593↑j
+il2cpp:128705A9                 mov     ecx, dword_16098B2C
+il2cpp:128705AF                 test    byte ptr [ecx+2Fh], 20h
+il2cpp:128705B3                 jz      short loc_128705C3
+il2cpp:128705B5                 mov     eax, [ecx+34h]
+il2cpp:128705B8                 push    ecx
+il2cpp:128705B9                 push    esi
+il2cpp:128705BA                 call    eax
+il2cpp:128705BC                 add     esp, 8
+il2cpp:128705BF                 mov     edi, eax
+il2cpp:128705C1                 jmp     short loc_128705C6
+il2cpp:128705C3 ; ---------------------------------------------------------------------------
+il2cpp:128705C3
+il2cpp:128705C3 loc_128705C3:                           ; CODE XREF: il2cpp:128705B3↑j
+il2cpp:128705C3                 mov     edi, [esi+38h]
+il2cpp:128705C6
+il2cpp:128705C6 loc_128705C6:                           ; CODE XREF: il2cpp:128705C1↑j
+il2cpp:128705C6                 test    edi, edi
+il2cpp:128705C8                 jz      loc_12870885
+il2cpp:128705CE                 cmp     byte_16295A03, 0
+il2cpp:128705D5                 jnz     short loc_128705EB
+il2cpp:128705D7                 push    offset dword_160FCD00
+il2cpp:128705DC                 call    near ptr unk_10586F80
+il2cpp:128705E1                 add     esp, 4
+il2cpp:128705E4                 mov     byte_16295A03, 1
+il2cpp:128705EB
+il2cpp:128705EB loc_128705EB:                           ; CODE XREF: il2cpp:128705D5↑j
+il2cpp:128705EB                 mov     ecx, dword_160FCD00
+il2cpp:128705F1                 test    byte ptr [ecx+2Fh], 20h
+il2cpp:128705F5                 jz      short loc_12870605
+il2cpp:128705F7                 mov     eax, [ecx+34h]
+il2cpp:128705FA                 push    ecx
+il2cpp:128705FB                 push    edi
+il2cpp:128705FC                 call    eax
+il2cpp:128705FE                 add     esp, 8
+il2cpp:12870601                 mov     ecx, eax
+il2cpp:12870603                 jmp     short loc_1287060B
+il2cpp:12870605 ; ---------------------------------------------------------------------------
+il2cpp:12870605
+il2cpp:12870605 loc_12870605:                           ; CODE XREF: il2cpp:128705F5↑j
+il2cpp:12870605                 mov     ecx, [edi+2D0h]
+il2cpp:1287060B
+il2cpp:1287060B loc_1287060B:                           ; CODE XREF: il2cpp:12870603↑j
+il2cpp:1287060B                 test    ecx, ecx
+il2cpp:1287060D                 jz      loc_12870885
+il2cpp:12870613                 push    0
+il2cpp:12870615                 lea     eax, [esi+48h]
+il2cpp:12870618                 push    eax
+il2cpp:12870619                 push    dword ptr [esi+48h]
+il2cpp:1287061C                 push    ecx
+il2cpp:1287061D                 call    near ptr unk_128F0B70
+il2cpp:12870622                 add     esp, 10h
+il2cpp:12870625
+il2cpp:12870625 loc_12870625:                           ; CODE XREF: il2cpp:12870586↑j
+il2cpp:12870625                 movq    xmm0, qword ptr [ebp+0Ch]
+il2cpp:1287062A                 mov     eax, [ebp+2Ch]
+il2cpp:1287062D                 mov     edi, [ebp+14h]
+il2cpp:12870630                 mov     ebx, [ebp+20h]
+il2cpp:12870633                 movq    qword ptr [esi+4Ch], xmm0
+il2cpp:12870638                 movq    xmm0, qword ptr [ebp+18h]
+il2cpp:1287063D                 push    0
+il2cpp:1287063F                 push    dword ptr [ebp+30h]
+il2cpp:12870642                 movq    qword ptr [esi+58h], xmm0
+il2cpp:12870647                 movq    xmm0, qword ptr [ebp+24h]
+il2cpp:1287064C                 movq    qword ptr [esi+64h], xmm0
+il2cpp:12870651                 push    esi
+il2cpp:12870652                 mov     [esi+54h], edi
+il2cpp:12870655                 mov     [esi+60h], ebx
+il2cpp:12870658                 mov     [esi+6Ch], eax
+il2cpp:1287065B                 call    near ptr unk_1286B6A0
+il2cpp:12870660                 add     esp, 0Ch
+il2cpp:12870663                 cmp     byte_162A6F45, 0
+il2cpp:1287066A                 jnz     short loc_12870680
+il2cpp:1287066C                 push    offset dword_16098818
+il2cpp:12870671                 call    near ptr unk_10586F80
+il2cpp:12870676                 add     esp, 4
+il2cpp:12870679                 mov     byte_162A6F45, 1
+il2cpp:12870680
+il2cpp:12870680 loc_12870680:                           ; CODE XREF: il2cpp:1287066A↑j
+il2cpp:12870680                 mov     ecx, dword_16098818
+il2cpp:12870686                 test    byte ptr [ecx+2Fh], 20h
+il2cpp:1287068A                 jz      short loc_1287069A
+il2cpp:1287068C                 mov     eax, [ecx+34h]
+il2cpp:1287068F                 push    ecx
+il2cpp:12870690                 push    esi
+il2cpp:12870691                 call    eax
+il2cpp:12870693                 add     esp, 8
+il2cpp:12870696                 mov     edx, eax
+il2cpp:12870698                 jmp     short loc_1287069D
+il2cpp:1287069A ; ---------------------------------------------------------------------------
+il2cpp:1287069A
+il2cpp:1287069A loc_1287069A:                           ; CODE XREF: il2cpp:1287068A↑j
+il2cpp:1287069A                 mov     edx, [esi+18h]
+il2cpp:1287069D
+il2cpp:1287069D loc_1287069D:                           ; CODE XREF: il2cpp:12870698↑j
+il2cpp:1287069D                 test    edx, edx
+il2cpp:1287069F                 jz      loc_12870885
+il2cpp:128706A5                 mov     eax, [edx]
+il2cpp:128706A7                 push    dword ptr [eax+2D4h]
+il2cpp:128706AD                 mov     ecx, [eax+2D0h]
+il2cpp:128706B3                 push    edx
+il2cpp:128706B4                 call    ecx
+il2cpp:128706B6                 add     esp, 8
+il2cpp:128706B9                 test    al, al
+il2cpp:128706BB                 jz      loc_1287057A
+il2cpp:128706C1                 mov     eax, [esi+24h]
+il2cpp:128706C4                 test    eax, eax
+il2cpp:128706C6                 jz      loc_12870885
+il2cpp:128706CC                 mov     eax, [eax+14h]
+il2cpp:128706CF                 cmp     eax, 3          ; switch 4 cases
+il2cpp:128706D2                 ja      def_128706D8    ; jumptable 128706D8 default case
+il2cpp:128706D8                 jmp     ds:jpt_128706D8[eax*4] ; switch jump
+il2cpp:128706DF ; ---------------------------------------------------------------------------
+il2cpp:128706DF
+il2cpp:128706DF loc_128706DF:                           ; CODE XREF: il2cpp:128706D8↑j
+il2cpp:128706DF                 push    0               ; jumptable 128706D8 case 0
+il2cpp:128706E1                 push    esi
+il2cpp:128706E2                 call    near ptr unk_1286FD10
+il2cpp:128706E7                 jmp     loc_12870848
+il2cpp:128706EC ; ---------------------------------------------------------------------------
+il2cpp:128706EC
+il2cpp:128706EC loc_128706EC:                           ; CODE XREF: il2cpp:128706D8↑j
+il2cpp:128706EC                 cmp     byte_162A6DF7, 0 ; jumptable 128706D8 case 1
+il2cpp:128706F3                 jnz     short loc_12870713
+il2cpp:128706F5                 push    offset dword_160B4558
+il2cpp:128706FA                 call    near ptr unk_10586F80
+il2cpp:128706FF                 push    offset dword_16095B74
+il2cpp:12870704                 call    near ptr unk_10586F80
+il2cpp:12870709                 add     esp, 8
+il2cpp:1287070C                 mov     byte_162A6DF7, 1
+il2cpp:12870713
+il2cpp:12870713 loc_12870713:                           ; CODE XREF: il2cpp:128706F3↑j
+il2cpp:12870713                 mov     eax, dword_16095B74
+il2cpp:12870718                 test    byte ptr [eax+2Fh], 20h
+il2cpp:1287071C                 jz      short loc_1287072A
+il2cpp:1287071E                 push    eax
+il2cpp:1287071F                 mov     eax, [eax+34h]
+il2cpp:12870722                 push    esi
+il2cpp:12870723                 call    eax
+il2cpp:12870725                 jmp     loc_12870848
+il2cpp:1287072A ; ---------------------------------------------------------------------------
+il2cpp:1287072A
+il2cpp:1287072A loc_1287072A:                           ; CODE XREF: il2cpp:1287071C↑j
+il2cpp:1287072A                 cmp     byte_162A6F4A, 0
+il2cpp:12870731                 jnz     short loc_12870747
+il2cpp:12870733                 push    offset dword_16098B2C
+il2cpp:12870738                 call    near ptr unk_10586F80
+il2cpp:1287073D                 add     esp, 4
+il2cpp:12870740                 mov     byte_162A6F4A, 1
+il2cpp:12870747
+il2cpp:12870747 loc_12870747:                           ; CODE XREF: il2cpp:12870731↑j
+il2cpp:12870747                 mov     ecx, dword_16098B2C
+il2cpp:1287074D                 test    byte ptr [ecx+2Fh], 20h
+il2cpp:12870751                 jz      short loc_12870761
+il2cpp:12870753                 mov     eax, [ecx+34h]
+il2cpp:12870756                 push    ecx
+il2cpp:12870757                 push    esi
+il2cpp:12870758                 call    eax
+il2cpp:1287075A                 add     esp, 8
+il2cpp:1287075D                 mov     edx, eax
+il2cpp:1287075F                 jmp     short loc_12870764
+il2cpp:12870761 ; ---------------------------------------------------------------------------
+il2cpp:12870761
+il2cpp:12870761 loc_12870761:                           ; CODE XREF: il2cpp:12870751↑j
+il2cpp:12870761                 mov     edx, [esi+38h]
+il2cpp:12870764
+il2cpp:12870764 loc_12870764:                           ; CODE XREF: il2cpp:1287075F↑j
+il2cpp:12870764                 test    edx, edx
+il2cpp:12870766                 jz      loc_12870885
+il2cpp:1287076C                 mov     eax, [edx]
+il2cpp:1287076E                 push    dword ptr [eax+1BCh]
+il2cpp:12870774                 mov     ecx, [eax+1B8h]
+il2cpp:1287077A                 push    edx
+il2cpp:1287077B                 call    ecx
+il2cpp:1287077D                 mov     ecx, [esi+24h]
+il2cpp:12870780                 add     esp, 8
+il2cpp:12870783                 mov     edi, eax
+il2cpp:12870785                 test    ecx, ecx
+il2cpp:12870787                 jz      loc_12870885
+il2cpp:1287078D                 cmp     byte_1629B106, 0
+il2cpp:12870794                 mov     ebx, [ecx+24h]
+il2cpp:12870797                 jnz     short loc_128707AD
+il2cpp:12870799                 push    offset dword_160989A0
+il2cpp:1287079E                 call    near ptr unk_10586F80
+il2cpp:128707A3                 add     esp, 4
+il2cpp:128707A6                 mov     byte_1629B106, 1
+il2cpp:128707AD
+il2cpp:128707AD loc_128707AD:                           ; CODE XREF: il2cpp:12870797↑j
+il2cpp:128707AD                 mov     ecx, dword_160989A0
+il2cpp:128707B3                 test    byte ptr [ecx+2Fh], 20h
+il2cpp:128707B7                 jz      short loc_128707C7
+il2cpp:128707B9                 mov     eax, [ecx+34h]
+il2cpp:128707BC                 push    ecx
+il2cpp:128707BD                 push    esi
+il2cpp:128707BE                 call    eax
+il2cpp:128707C0                 add     esp, 8
+il2cpp:128707C3                 mov     ecx, eax
+il2cpp:128707C5                 jmp     short loc_128707CA
+il2cpp:128707C7 ; ---------------------------------------------------------------------------
+il2cpp:128707C7
+il2cpp:128707C7 loc_128707C7:                           ; CODE XREF: il2cpp:128707B7↑j
+il2cpp:128707C7                 mov     ecx, [esi+14h]
+il2cpp:128707CA
+il2cpp:128707CA loc_128707CA:                           ; CODE XREF: il2cpp:128707C5↑j
+il2cpp:128707CA                 mov     eax, dword_160B4558
+il2cpp:128707CF                 mov     eax, [eax+5Ch]
+il2cpp:128707D2                 mov     eax, [eax]
+il2cpp:128707D4                 test    eax, eax
+il2cpp:128707D6                 jz      loc_12870885
+il2cpp:128707DC                 test    edi, edi
+il2cpp:128707DE                 jz      loc_12870885
+il2cpp:128707E4                 push    0
+il2cpp:128707E6                 push    0
+il2cpp:128707E8                 push    dword ptr [eax+0D8h]
+il2cpp:128707EE                 push    ecx
+il2cpp:128707EF                 push    0
+il2cpp:128707F1                 push    ebx
+il2cpp:128707F2                 push    edi
+il2cpp:128707F3                 call    near ptr unk_1249A880
+il2cpp:128707F8                 add     esp, 1Ch
+il2cpp:128707FB                 jmp     short def_128706D8 ; jumptable 128706D8 default case
+il2cpp:128707FD ; ---------------------------------------------------------------------------
+il2cpp:128707FD
+il2cpp:128707FD loc_128707FD:                           ; CODE XREF: il2cpp:128706D8↑j
+il2cpp:128707FD                 movq    xmm0, qword ptr [ebp+24h] ; jumptable 128706D8 case 2
+il2cpp:12870802                 mov     ecx, [ebp+2Ch]
+il2cpp:12870805                 push    0
+il2cpp:12870807                 sub     esp, 0Ch
+il2cpp:1287080A                 mov     eax, esp
+il2cpp:1287080C                 sub     esp, 0Ch
+il2cpp:1287080F                 movq    qword ptr [eax], xmm0
+il2cpp:12870813                 movq    xmm0, qword ptr [ebp+18h]
+il2cpp:12870818                 mov     [eax+8], ecx
+il2cpp:1287081B                 mov     eax, esp
+il2cpp:1287081D                 sub     esp, 0Ch
+il2cpp:12870820                 movq    qword ptr [eax], xmm0
+il2cpp:12870824                 movq    xmm0, qword ptr [ebp+0Ch]
+il2cpp:12870829                 mov     [eax+8], ebx
+il2cpp:1287082C                 mov     eax, esp
+il2cpp:1287082E                 push    esi
+il2cpp:1287082F                 movq    qword ptr [eax], xmm0
+il2cpp:12870833                 mov     [eax+8], edi
+il2cpp:12870836                 call    near ptr unk_128700A0
+il2cpp:1287083B                 add     esp, 2Ch
+il2cpp:1287083E                 jmp     short def_128706D8 ; jumptable 128706D8 default case
+il2cpp:12870840 ; ---------------------------------------------------------------------------
+il2cpp:12870840
+il2cpp:12870840 loc_12870840:                           ; CODE XREF: il2cpp:128706D8↑j
+il2cpp:12870840                 push    0               ; jumptable 128706D8 case 3
+il2cpp:12870842                 push    esi
+il2cpp:12870843                 call    near ptr unk_1286BAA0
+il2cpp:12870848
+il2cpp:12870848 loc_12870848:                           ; CODE XREF: il2cpp:128706E7↑j
+il2cpp:12870848                                         ; il2cpp:12870725↑j
+il2cpp:12870848                 add     esp, 8
+il2cpp:1287084B
+il2cpp:1287084B def_128706D8:                           ; CODE XREF: il2cpp:128706D2↑j
+il2cpp:1287084B                                         ; il2cpp:128707FB↑j ...
+il2cpp:1287084B                 mov     eax, [esi+24h]  ; jumptable 128706D8 default case
+il2cpp:1287084E                 test    eax, eax
+il2cpp:12870850                 jz      short loc_12870885
+il2cpp:12870852                 cmp     dword ptr [eax+14h], 2
+il2cpp:12870856                 jnz     loc_1287057A
+il2cpp:1287085C                 push    0
+il2cpp:1287085E                 push    esi
+il2cpp:1287085F                 call    near ptr unk_1284F490
+il2cpp:12870864                 add     esp, 8
+il2cpp:12870867                 test    eax, eax
+il2cpp:12870869                 jz      short loc_12870885
+il2cpp:1287086B                 push    0
+il2cpp:1287086D                 push    0
+il2cpp:1287086F                 push    ecx
+il2cpp:12870870                 mov     dword ptr [esp], 0
+il2cpp:12870877                 push    eax
+il2cpp:12870878                 call    near ptr unk_11EC0670
+il2cpp:1287087D                 add     esp, 10h
+il2cpp:12870880                 pop     edi
+il2cpp:12870881                 pop     esi
+il2cpp:12870882                 pop     ebx
+il2cpp:12870883                 pop     ebp
+il2cpp:12870884                 retn
+il2cpp:12870885 ; ---------------------------------------------------------------------------
+il2cpp:12870885
+il2cpp:12870885 loc_12870885:                           ; CODE XREF: il2cpp:128705C8↑j
+il2cpp:12870885                                         ; il2cpp:1287060D↑j ...
+il2cpp:12870885                 call    near ptr unk_10587220
+il2cpp:1287088A                 xchg    ax, ax
+il2cpp:1287088C jpt_128706D8    dd offset loc_128706DF  ; DATA XREF: il2cpp:128706D8↑r
+il2cpp:12870890                 dd offset loc_128706EC  ; jump table for switch statement
+il2cpp:12870894                 dd offset loc_128707FD
+il2cpp:12870898                 dd offset loc_12870840
+
+qntQL...YzCvqpay...()
+il2cpp:1286D820                 push    ebp
+il2cpp:1286D821                 mov     ebp, esp
+il2cpp:1286D823                 cmp     byte_162A6E12, 0
+il2cpp:1286D82A                 jnz     short loc_1286D840
+il2cpp:1286D82C                 push    offset dword_16097A3C
+il2cpp:1286D831                 call    near ptr unk_10586F80
+il2cpp:1286D836                 add     esp, 4
+il2cpp:1286D839                 mov     byte_162A6E12, 1
+il2cpp:1286D840
+il2cpp:1286D840 loc_1286D840:                           ; CODE XREF: sub_1286D820+A↑j
+il2cpp:1286D840                 mov     ecx, dword_16097A3C
+il2cpp:1286D846                 test    byte ptr [ecx+2Fh], 20h
+il2cpp:1286D84A                 jz      short loc_1286D855
+il2cpp:1286D84C                 mov     eax, [ecx+34h]
+il2cpp:1286D84F                 mov     [ebp+0Ch], ecx
+il2cpp:1286D852                 pop     ebp
+il2cpp:1286D853                 jmp     eax
+il2cpp:1286D855 ; ---------------------------------------------------------------------------
+il2cpp:1286D855
+il2cpp:1286D855 loc_1286D855:                           ; CODE XREF: sub_1286D820+2A↑j
+il2cpp:1286D855                 mov     ecx, [ebp+8]
+il2cpp:1286D858                 mov     eax, [ecx+24h]
+il2cpp:1286D85B                 test    eax, eax
+il2cpp:1286D85D                 jz      short loc_1286D872
+il2cpp:1286D85F                 cmp     dword ptr [eax+14h], 0
+il2cpp:1286D863                 jnz     short loc_1286D869
+il2cpp:1286D865                 mov     al, 1
+il2cpp:1286D867                 pop     ebp
+il2cpp:1286D868                 retn
+il2cpp:1286D869 ; ---------------------------------------------------------------------------
+il2cpp:1286D869
+il2cpp:1286D869 loc_1286D869:                           ; CODE XREF: sub_1286D820+43↑j
+il2cpp:1286D869                 cmp     dword ptr [eax+14h], 2
+il2cpp:1286D86D                 setz    al
+il2cpp:1286D870                 pop     ebp
+il2cpp:1286D871                 retn
+il2cpp:1286D872 ; ---------------------------------------------------------------------------
+il2cpp:1286D872
+il2cpp:1286D872 loc_1286D872:                           ; CODE XREF: sub_1286D820+3D↑j
+il2cpp:1286D872                 jmp     near ptr unk_10587220
+il2cpp:1286D872 sub_1286D820    endp
+il2cpp:1286D872
+il2cpp:1286D872 ; ---------------------------------------------------------------------------
+
+
+
+il2cpp:1284F490 ; =============== S U B R O U T I N E =======================================
+il2cpp:1284F490
+il2cpp:1284F490 ; Attributes: bp-based frame
+il2cpp:1284F490
+il2cpp:1284F490 sub_1284F490    proc near
+il2cpp:1284F490                 push    ebp
+il2cpp:1284F491                 mov     ebp, esp
+il2cpp:1284F493                 cmp     byte_162A6F4A, 0
+il2cpp:1284F49A                 jnz     short loc_1284F4B0
+il2cpp:1284F49C                 push    offset dword_16098B2C
+il2cpp:1284F4A1                 call    near ptr unk_10586F80
+il2cpp:1284F4A6                 add     esp, 4
+il2cpp:1284F4A9                 mov     byte_162A6F4A, 1
+il2cpp:1284F4B0
+il2cpp:1284F4B0 loc_1284F4B0:                           ; CODE XREF: sub_1284F490+A↑j
+il2cpp:1284F4B0                 mov     ecx, dword_16098B2C
+il2cpp:1284F4B6                 test    byte ptr [ecx+2Fh], 20h
+il2cpp:1284F4BA                 jz      short loc_1284F4C5
+il2cpp:1284F4BC                 mov     eax, [ecx+34h]
+il2cpp:1284F4BF                 mov     [ebp+0Ch], ecx
+il2cpp:1284F4C2                 pop     ebp
+il2cpp:1284F4C3                 jmp     eax
+il2cpp:1284F4C5 ; ---------------------------------------------------------------------------
+il2cpp:1284F4C5
+il2cpp:1284F4C5 loc_1284F4C5:                           ; CODE XREF: sub_1284F490+2A↑j
+il2cpp:1284F4C5                 mov     eax, [ebp+8]
+il2cpp:1284F4C8                 mov     eax, [eax+38h]
+il2cpp:1284F4CB                 pop     ebp
+il2cpp:1284F4CC                 retn
+il2cpp:1284F4CC sub_1284F490    endp
+il2cpp:1284F4CC
+il2cpp:1284F4CC ; ---------------------------------------------------------------------------
+
+il2cpp:12663940                 push    ebp
+il2cpp:12663941                 mov     ebp, esp
+il2cpp:12663943                 sub     esp, 18h
+il2cpp:12663946                 cmp     byte_162A5543, 0
+il2cpp:1266394D                 push    ebx
+il2cpp:1266394E                 push    esi
+il2cpp:1266394F                 push    edi
+il2cpp:12663950                 jnz     short loc_1266398E
+il2cpp:12663952                 push    offset dword_160BC614
+il2cpp:12663957                 call    near ptr unk_10586F80
+il2cpp:1266395C                 push    offset dword_160B4558
+il2cpp:12663961                 call    near ptr unk_10586F80
+il2cpp:12663966                 push    offset dword_1609AFC4
+il2cpp:1266396B                 call    near ptr unk_10586F80
+il2cpp:12663970                 push    offset dword_160E8BDC
+il2cpp:12663975                 call    near ptr unk_10586F80
+il2cpp:1266397A                 push    offset dword_160D7F24
+il2cpp:1266397F                 call    near ptr unk_10586F80
+il2cpp:12663984                 add     esp, 14h
+il2cpp:12663987                 mov     byte_162A5543, 1
+il2cpp:1266398E
+il2cpp:1266398E loc_1266398E:                           ; CODE XREF: sub_12663940+10↑j
+il2cpp:1266398E                 mov     edx, dword_160D7F24
+il2cpp:12663994                 test    byte ptr [edx+2Fh], 20h
+il2cpp:12663998                 jz      short loc_12663A06
+il2cpp:1266399A                 movq    xmm0, qword ptr [ebp+34h]
+il2cpp:1266399F                 mov     eax, [ebp+3Ch]
+il2cpp:126639A2                 push    edx
+il2cpp:126639A3                 push    dword ptr [ebp+44h]
+il2cpp:126639A6                 push    dword ptr [ebp+40h]
+il2cpp:126639A9                 sub     esp, 0Ch
+il2cpp:126639AC                 mov     ecx, esp
+il2cpp:126639AE                 sub     esp, 0Ch
+il2cpp:126639B1                 movq    qword ptr [ecx], xmm0
+il2cpp:126639B5                 movq    xmm0, qword ptr [ebp+28h]
+il2cpp:126639BA                 mov     [ecx+8], eax
+il2cpp:126639BD                 mov     ecx, esp
+il2cpp:126639BF                 mov     eax, [ebp+30h]
+il2cpp:126639C2                 sub     esp, 0Ch
+il2cpp:126639C5                 movq    qword ptr [ecx], xmm0
+il2cpp:126639C9                 movq    xmm0, qword ptr [ebp+1Ch]
+il2cpp:126639CE                 mov     [ecx+8], eax
+il2cpp:126639D1                 mov     ecx, esp
+il2cpp:126639D3                 mov     eax, [ebp+24h]
+il2cpp:126639D6                 sub     esp, 0Ch
+il2cpp:126639D9                 movq    qword ptr [ecx], xmm0
+il2cpp:126639DD                 movq    xmm0, qword ptr [ebp+10h]
+il2cpp:126639E2                 mov     [ecx+8], eax
+il2cpp:126639E5                 mov     ecx, esp
+il2cpp:126639E7                 push    dword ptr [ebp+0Ch]
+il2cpp:126639EA                 mov     eax, [ebp+18h]
+il2cpp:126639ED                 push    dword ptr [ebp+8]
+il2cpp:126639F0                 movq    qword ptr [ecx], xmm0
+il2cpp:126639F4                 mov     [ecx+8], eax
+il2cpp:126639F7                 mov     eax, [edx+34h]
+il2cpp:126639FA                 call    eax
+il2cpp:126639FC                 add     esp, 44h
+il2cpp:126639FF                 pop     edi
+il2cpp:12663A00                 pop     esi
+il2cpp:12663A01                 pop     ebx
+il2cpp:12663A02                 mov     esp, ebp
+il2cpp:12663A04                 pop     ebp
+il2cpp:12663A05                 retn
+il2cpp:12663A06 ; ---------------------------------------------------------------------------
+il2cpp:12663A06
+il2cpp:12663A06 loc_12663A06:                           ; CODE XREF: sub_12663940+58↑j
+il2cpp:12663A06                 mov     edi, [ebp+8]
+il2cpp:12663A09                 xorps   xmm0, xmm0
+il2cpp:12663A0C                 movlpd  qword ptr [ebp-8], xmm0
+il2cpp:12663A11                 mov     esi, [edi+18h]
+il2cpp:12663A14                 test    esi, esi
+il2cpp:12663A16                 jz      loc_12663CCE
+il2cpp:12663A1C                 cmp     byte_1628B7C6, 0
+il2cpp:12663A23                 jnz     short loc_12663A39
+il2cpp:12663A25                 push    offset dword_1606E99C
+il2cpp:12663A2A                 call    near ptr unk_10586F80
+il2cpp:12663A2F                 add     esp, 4
+il2cpp:12663A32                 mov     byte_1628B7C6, 1
+il2cpp:12663A39
+il2cpp:12663A39 loc_12663A39:                           ; CODE XREF: sub_12663940+E3↑j
+il2cpp:12663A39                 mov     ecx, dword_1606E99C
+il2cpp:12663A3F                 test    byte ptr [ecx+2Fh], 20h
+il2cpp:12663A43                 jz      short loc_12663A53
+il2cpp:12663A45                 mov     eax, [ecx+34h]
+il2cpp:12663A48                 push    ecx
+il2cpp:12663A49                 push    esi
+il2cpp:12663A4A                 call    eax
+il2cpp:12663A4C                 add     esp, 8
+il2cpp:12663A4F                 mov     esi, eax
+il2cpp:12663A51                 jmp     short loc_12663A56
+il2cpp:12663A53 ; ---------------------------------------------------------------------------
+il2cpp:12663A53
+il2cpp:12663A53 loc_12663A53:                           ; CODE XREF: sub_12663940+103↑j
+il2cpp:12663A53                 mov     esi, [esi+78h]
+il2cpp:12663A56
+il2cpp:12663A56 loc_12663A56:                           ; CODE XREF: sub_12663940+111↑j
+il2cpp:12663A56                 mov     eax, dword_160BC614
+il2cpp:12663A5B                 cmp     dword ptr [eax+74h], 0
+il2cpp:12663A5F                 jnz     short loc_12663A6A
+il2cpp:12663A61                 push    eax
+il2cpp:12663A62                 call    near ptr il2cpp_runtime_class_init
+il2cpp:12663A67                 add     esp, 4
+il2cpp:12663A6A
+il2cpp:12663A6A loc_12663A6A:                           ; CODE XREF: sub_12663940+11F↑j
+il2cpp:12663A6A                 push    0
+il2cpp:12663A6C                 call    near ptr unk_107B80B0
+il2cpp:12663A71                 add     esp, 4
+il2cpp:12663A74                 test    eax, eax
+il2cpp:12663A76                 jz      loc_12663CCE
+il2cpp:12663A7C                 push    0
+il2cpp:12663A7E                 push    dword ptr [eax+0Ch]
+il2cpp:12663A81                 push    esi
+il2cpp:12663A82                 call    near ptr unk_14338520
+il2cpp:12663A87                 add     esp, 0Ch
+il2cpp:12663A8A                 test    al, al
+il2cpp:12663A8C                 jz      loc_12663B1D
+il2cpp:12663A92                 mov     eax, dword_160B4558
+il2cpp:12663A97                 mov     eax, [eax+5Ch]
+il2cpp:12663A9A                 mov     esi, [eax]
+il2cpp:12663A9C                 mov     eax, dword_1609AFC4
+il2cpp:12663AA1                 cmp     dword ptr [eax+74h], 0
+il2cpp:12663AA5                 jnz     short loc_12663AB0
+il2cpp:12663AA7                 push    eax
+il2cpp:12663AA8                 call    near ptr il2cpp_runtime_class_init
+il2cpp:12663AAD                 add     esp, 4
+il2cpp:12663AB0
+il2cpp:12663AB0 loc_12663AB0:                           ; CODE XREF: sub_12663940+165↑j
+il2cpp:12663AB0                 push    0
+il2cpp:12663AB2                 push    0
+il2cpp:12663AB4                 push    esi
+il2cpp:12663AB5                 call    near ptr unk_14D29580
+il2cpp:12663ABA                 add     esp, 0Ch
+il2cpp:12663ABD                 test    al, al
+il2cpp:12663ABF                 jz      short loc_12663B1D
+il2cpp:12663AC1                 mov     eax, dword_160B4558
+il2cpp:12663AC6                 mov     eax, [eax+5Ch]
+il2cpp:12663AC9                 mov     esi, [eax]
+il2cpp:12663ACB                 test    esi, esi
+il2cpp:12663ACD                 jz      loc_12663CCE
+il2cpp:12663AD3                 cmp     byte_1628B9AF, 0
+il2cpp:12663ADA                 jnz     short loc_12663AF0
+il2cpp:12663ADC                 push    offset dword_160D02B4
+il2cpp:12663AE1                 call    near ptr unk_10586F80
+il2cpp:12663AE6                 add     esp, 4
+il2cpp:12663AE9                 mov     byte_1628B9AF, 1
+il2cpp:12663AF0
+il2cpp:12663AF0 loc_12663AF0:                           ; CODE XREF: sub_12663940+19A↑j
+il2cpp:12663AF0                 mov     ecx, dword_160D02B4
+il2cpp:12663AF6                 test    byte ptr [ecx+2Fh], 20h
+il2cpp:12663AFA                 jz      short loc_12663B08
+il2cpp:12663AFC                 mov     eax, [ecx+34h]
+il2cpp:12663AFF                 push    ecx
+il2cpp:12663B00                 push    esi
+il2cpp:12663B01                 call    eax
+il2cpp:12663B03                 add     esp, 8
+il2cpp:12663B06                 jmp     short loc_12663B63
+il2cpp:12663B08 ; ---------------------------------------------------------------------------
+il2cpp:12663B08
+il2cpp:12663B08 loc_12663B08:                           ; CODE XREF: sub_12663940+1BA↑j
+il2cpp:12663B08                 cmp     byte ptr [esi+0CDh], 0
+il2cpp:12663B0F                 jz      short loc_12663B19
+il2cpp:12663B11                 mov     eax, [esi+98h]
+il2cpp:12663B17                 jmp     short loc_12663B63
+il2cpp:12663B19 ; ---------------------------------------------------------------------------
+il2cpp:12663B19
+il2cpp:12663B19 loc_12663B19:                           ; CODE XREF: sub_12663940+1CF↑j
+il2cpp:12663B19                 xor     eax, eax
+il2cpp:12663B1B                 jmp     short loc_12663B63
+il2cpp:12663B1D ; ---------------------------------------------------------------------------
+il2cpp:12663B1D
+il2cpp:12663B1D loc_12663B1D:                           ; CODE XREF: sub_12663940+14C↑j
+il2cpp:12663B1D                                         ; sub_12663940+17F↑j
+il2cpp:12663B1D                 mov     esi, [edi+18h]
+il2cpp:12663B20                 test    esi, esi
+il2cpp:12663B22                 jz      loc_12663CCE
+il2cpp:12663B28                 cmp     byte_1628B991, 0
+il2cpp:12663B2F                 jnz     short loc_12663B45
+il2cpp:12663B31                 push    offset dword_160EE6F8
+il2cpp:12663B36                 call    near ptr unk_10586F80
+il2cpp:12663B3B                 add     esp, 4
+il2cpp:12663B3E                 mov     byte_1628B991, 1
+il2cpp:12663B45
+il2cpp:12663B45 loc_12663B45:                           ; CODE XREF: sub_12663940+1EF↑j
+il2cpp:12663B45                 mov     ecx, dword_160EE6F8
+il2cpp:12663B4B                 test    byte ptr [ecx+2Fh], 20h
+il2cpp:12663B4F                 jz      short loc_12663B5D
+il2cpp:12663B51                 mov     eax, [ecx+34h]
+il2cpp:12663B54                 push    ecx
+il2cpp:12663B55                 push    esi
+il2cpp:12663B56                 call    eax
+il2cpp:12663B58                 add     esp, 8
+il2cpp:12663B5B                 jmp     short loc_12663B63
+il2cpp:12663B5D ; ---------------------------------------------------------------------------
+il2cpp:12663B5D
+il2cpp:12663B5D loc_12663B5D:                           ; CODE XREF: sub_12663940+20F↑j
+il2cpp:12663B5D                 mov     eax, [esi+370h]
+il2cpp:12663B63
+il2cpp:12663B63 loc_12663B63:                           ; CODE XREF: sub_12663940+1C6↑j
+il2cpp:12663B63                                         ; sub_12663940+1D7↑j ...
+il2cpp:12663B63                 mov     ebx, [edi+18h]
+il2cpp:12663B66                 mov     [ebp-0Ch], eax
+il2cpp:12663B69                 mov     eax, dword_160E8BDC
+il2cpp:12663B6E                 cmp     dword ptr [eax+74h], 0
+il2cpp:12663B72                 jnz     short loc_12663B82
+il2cpp:12663B74                 push    eax
+il2cpp:12663B75                 call    near ptr il2cpp_runtime_class_init
+il2cpp:12663B7A                 mov     eax, dword_160E8BDC
+il2cpp:12663B7F                 add     esp, 4
+il2cpp:12663B82
+il2cpp:12663B82 loc_12663B82:                           ; CODE XREF: sub_12663940+232↑j
+il2cpp:12663B82                 mov     eax, [eax+5Ch]
+il2cpp:12663B85                 mov     esi, [eax+2Ch]
+il2cpp:12663B88                 mov     eax, dword_1609AFC4
+il2cpp:12663B8D                 cmp     dword ptr [eax+74h], 0
+il2cpp:12663B91                 jnz     short loc_12663B9C
+il2cpp:12663B93                 push    eax
+il2cpp:12663B94                 call    near ptr il2cpp_runtime_class_init
+il2cpp:12663B99                 add     esp, 4
+il2cpp:12663B9C
+il2cpp:12663B9C loc_12663B9C:                           ; CODE XREF: sub_12663940+251↑j
+il2cpp:12663B9C                 push    0
+il2cpp:12663B9E                 push    esi
+il2cpp:12663B9F                 push    ebx
+il2cpp:12663BA0                 call    near ptr unk_14D29410
+il2cpp:12663BA5                 add     esp, 0Ch
+il2cpp:12663BA8                 test    [ebp+44h], al
+il2cpp:12663BAB                 jz      short loc_12663BEB
+il2cpp:12663BAD                 mov     eax, dword_160E8BDC
+il2cpp:12663BB2                 cmp     dword ptr [eax+74h], 0
+il2cpp:12663BB6                 jnz     short loc_12663BC6
+il2cpp:12663BB8                 push    eax
+il2cpp:12663BB9                 call    near ptr il2cpp_runtime_class_init
+il2cpp:12663BBE                 mov     eax, dword_160E8BDC
+il2cpp:12663BC3                 add     esp, 4
+il2cpp:12663BC6
+il2cpp:12663BC6 loc_12663BC6:                           ; CODE XREF: sub_12663940+276↑j
+il2cpp:12663BC6                 mov     eax, [eax+5Ch]
+il2cpp:12663BC9                 mov     eax, [eax+2Ch]
+il2cpp:12663BCC                 test    eax, eax
+il2cpp:12663BCE                 jz      loc_12663CCE
+il2cpp:12663BD4                 push    0
+il2cpp:12663BD6                 push    ecx
+il2cpp:12663BD7                 mov     dword ptr [esp], 40000000h
+il2cpp:12663BDE                 push    1
+il2cpp:12663BE0                 push    2
+il2cpp:12663BE2                 push    eax
+il2cpp:12663BE3                 call    near ptr unk_11ECCC40
+il2cpp:12663BE8                 add     esp, 14h
+il2cpp:12663BEB
+il2cpp:12663BEB loc_12663BEB:                           ; CODE XREF: sub_12663940+26B↑j
+il2cpp:12663BEB                 mov     eax, dword_160B4558
+il2cpp:12663BF0                 mov     eax, [eax+5Ch]
+il2cpp:12663BF3                 mov     eax, [eax]
+il2cpp:12663BF5                 test    eax, eax
+il2cpp:12663BF7                 jz      loc_12663CCE
+il2cpp:12663BFD                 mov     ebx, [eax+0D8h]
+il2cpp:12663C03                 mov     eax, [edi+18h]
+il2cpp:12663C06                 test    eax, eax
+il2cpp:12663C08                 jz      loc_12663CCE
+il2cpp:12663C0E                 mov     esi, [eax+20h]
+il2cpp:12663C11                 push    0
+il2cpp:12663C13                 call    near ptr unk_107BE230
+il2cpp:12663C18                 add     esp, 4
+il2cpp:12663C1B                 test    eax, eax
+il2cpp:12663C1D                 jz      short loc_12663C36
+il2cpp:12663C1F                 push    0
+il2cpp:12663C21                 call    near ptr unk_107BE230
+il2cpp:12663C26                 add     esp, 4
+il2cpp:12663C29                 test    eax, eax
+il2cpp:12663C2B                 jz      loc_12663CCE
+il2cpp:12663C31                 mov     edi, [eax+8]
+il2cpp:12663C34                 jmp     short loc_12663C38
+il2cpp:12663C36 ; ---------------------------------------------------------------------------
+il2cpp:12663C36
+il2cpp:12663C36 loc_12663C36:                           ; CODE XREF: sub_12663940+2DD↑j
+il2cpp:12663C36                 xor     edi, edi
+il2cpp:12663C38
+il2cpp:12663C38 loc_12663C38:                           ; CODE XREF: sub_12663940+2F4↑j
+il2cpp:12663C38                 push    0
+il2cpp:12663C3A                 call    near ptr unk_107BDE50
+il2cpp:12663C3F                 movq    xmm0, qword ptr [ebp-0Ch]
+il2cpp:12663C44                 add     esp, 4
+il2cpp:12663C47                 push    0
+il2cpp:12663C49                 sub     esp, 0Ch
+il2cpp:12663C4C                 mov     ecx, esp
+il2cpp:12663C4E                 push    eax
+il2cpp:12663C4F                 mov     eax, [ebp+3Ch]
+il2cpp:12663C52                 movq    qword ptr [ecx], xmm0
+il2cpp:12663C56                 movq    xmm0, qword ptr [ebp+34h]
+il2cpp:12663C5B                 mov     [ecx+8], ebx
+il2cpp:12663C5E                 push    edi
+il2cpp:12663C5F                 push    dword ptr [ebp+40h]
+il2cpp:12663C62                 sub     esp, 0Ch
+il2cpp:12663C65                 mov     ecx, esp
+il2cpp:12663C67                 sub     esp, 0Ch
+il2cpp:12663C6A                 movq    qword ptr [ecx], xmm0
+il2cpp:12663C6E                 movq    xmm0, qword ptr [ebp+28h]
+il2cpp:12663C73                 mov     [ecx+8], eax
+il2cpp:12663C76                 mov     ecx, esp
+il2cpp:12663C78                 mov     eax, [ebp+30h]
+il2cpp:12663C7B                 sub     esp, 0Ch
+il2cpp:12663C7E                 movq    qword ptr [ecx], xmm0
+il2cpp:12663C82                 movq    xmm0, qword ptr [ebp+1Ch]
+il2cpp:12663C87                 mov     [ecx+8], eax
+il2cpp:12663C8A                 mov     ecx, esp
+il2cpp:12663C8C                 mov     eax, [ebp+24h]
+il2cpp:12663C8F                 sub     esp, 0Ch
+il2cpp:12663C92                 movq    qword ptr [ecx], xmm0
+il2cpp:12663C96                 movq    xmm0, qword ptr [ebp+10h]
+il2cpp:12663C9B                 mov     [ecx+8], eax
+il2cpp:12663C9E                 mov     ecx, esp
+il2cpp:12663CA0                 mov     eax, [ebp+18h]
+il2cpp:12663CA3                 push    dword ptr [ebp+0Ch]
+il2cpp:12663CA6                 movq    qword ptr [ecx], xmm0
+il2cpp:12663CAA                 mov     [ecx+8], eax
+il2cpp:12663CAD                 call    near ptr unk_12E9E3A0
+il2cpp:12663CB2                 add     esp, 50h
+il2cpp:12663CB5                 test    esi, esi
+il2cpp:12663CB7                 jz      short loc_12663CCE
+il2cpp:12663CB9                 push    0
+il2cpp:12663CBB                 push    5
+il2cpp:12663CBD                 push    eax
+il2cpp:12663CBE                 push    esi
+il2cpp:12663CBF                 call    near ptr unk_107B1A00
+il2cpp:12663CC4                 add     esp, 10h
+il2cpp:12663CC7                 pop     edi
+il2cpp:12663CC8                 pop     esi
+il2cpp:12663CC9                 pop     ebx
+il2cpp:12663CCA                 mov     esp, ebp
+il2cpp:12663CCC                 pop     ebp
+il2cpp:12663CCD                 retn
+il2cpp:12663CCE ; ---------------------------------------------------------------------------
+il2cpp:12663CCE
+il2cpp:12663CCE loc_12663CCE:                           ; CODE XREF: sub_12663940+D6↑j
+il2cpp:12663CCE                                         ; sub_12663940+136↑j ...
+il2cpp:12663CCE                 call    near ptr unk_10587220
+il2cpp:12663CCE sub_12663940    endp
+il2cpp:12663CCE
+il2cpp:12663CCE ; ---------------------------------------------------------------------------

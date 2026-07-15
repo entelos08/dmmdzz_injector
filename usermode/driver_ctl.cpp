@@ -5,6 +5,7 @@
 
 #include <stdexcept>
 #include <cstring>
+#include <cstdio>
 #include <vector>
 
 namespace dmmdzz {
@@ -75,9 +76,11 @@ DWORD DriverCtl::SendIoctl(DWORD code,
 
     if (!ok) {
         DWORD err = GetLastError();
-        throw std::runtime_error(
-            "DeviceIoControl(0x" + std::to_string(code) +
-            ") failed (GetLastError=" + std::to_string(err) + ")");
+        char buf2[128];
+        std::snprintf(buf2, sizeof(buf2),
+            "DeviceIoControl(0x%08X) failed (GetLastError=%lu)",
+            (unsigned)code, (unsigned long)err);
+        throw std::runtime_error(buf2);
     }
     return *bytesReturned;
 }
@@ -207,11 +210,36 @@ void DriverCtl::WriteMemory(uint32_t pid, uintptr_t remoteVA,
     hdr->BufferOffset= sizeof(DMMDZZ_MEM_OP);
     std::memcpy(buf.data() + hdr->BufferOffset, inBuf, size);
 
+    std::printf("[*] WriteMemory: pid=%u VA=0x%016llX size=%zu "
+                "sizeof(MEM_OP)=%zu bufSize=%zu BufferOffset=%llu\n",
+                pid, (unsigned long long)remoteVA, size,
+                sizeof(DMMDZZ_MEM_OP), buf.size(),
+                (unsigned long long)hdr->BufferOffset);
+
     DWORD ret = 0;
-    SendIoctl(IOCTL_DMMDZZ_WRITE_MEMORY,
-              buf.data(), (DWORD)buf.size(),
-              buf.data(), (DWORD)buf.size(),
-              &ret);
+    BOOL ok = DeviceIoControl(
+        hDevice_, IOCTL_DMMDZZ_WRITE_MEMORY,
+        buf.data(), (DWORD)buf.size(),
+        buf.data(), (DWORD)buf.size(),
+        &ret, nullptr);
+
+    if (!ok) {
+        DWORD err = GetLastError();
+        std::printf("[!] DeviceIoControl failed: GetLastError=%lu ret=%lu\n",
+                    (unsigned long)err, (unsigned long)ret);
+        std::printf("[!] Driver returned: Hdr.Status=0x%08X Hdr.ExtendedStatus=%u "
+                    "BytesTransferred=%llu\n",
+                    (unsigned)hdr->Hdr.Status,
+                    (unsigned)hdr->Hdr.ExtendedStatus,
+                    (unsigned long long)hdr->BytesTransferred);
+        char msg[256];
+        std::snprintf(msg, sizeof(msg),
+            "DeviceIoControl(0x%08X) failed (GetLastError=%lu, "
+            "NTSTATUS=0x%08X, ExtStatus=%u)",
+            (unsigned)IOCTL_DMMDZZ_WRITE_MEMORY, (unsigned long)err,
+            (unsigned)hdr->Hdr.Status, (unsigned)hdr->Hdr.ExtendedStatus);
+        throw std::runtime_error(msg);
+    }
 
     if (hdr->Hdr.Status != 0)
         throw std::runtime_error("WriteMemory failed (NTSTATUS=0x" +
@@ -254,6 +282,11 @@ void DriverCtl::ScanMemory(uint32_t pid, const void* value, size_t valueSize,
     // Copy value bytes into buffer
     std::memcpy(buf.data() + valueOffset, value, valueSize);
 
+    std::printf("[*] IOCTL buffer: header=%u valueOff=%u valueSize=%zu "
+                "resultsOff=%u maxResults=%zu totalSize=%u\n",
+                (unsigned)headerSize, (unsigned)valueOffset, valueSize,
+                (unsigned)resultsOffset, maxResults, (unsigned)totalSize);
+
     DWORD ret = 0;
     SendIoctl(IOCTL_DMMDZZ_SCAN_MEMORY,
               buf.data(), totalSize,
@@ -271,6 +304,158 @@ void DriverCtl::ScanMemory(uint32_t pid, const void* value, size_t valueSize,
     for (ULONG i = 0; i < hdr->ResultsCount; i++) {
         outAddrs.push_back(results[i]);
     }
+}
+
+// -----------------------------------------------------------------------------
+// EnumModules — enumerate loaded modules via IOCTL_DMMDZZ_ENUM_MODULES.
+//
+// Buffer layout:
+//   [DMMDZZ_ENUM_MODULES header][DMMDZZ_MODULE_ENTRY Modules[]]
+//
+// The driver attaches to the target process, reads PEB->Ldr, and walks the
+// InLoadOrderModuleList to collect base/size/name of each loaded module.
+// -----------------------------------------------------------------------------
+void DriverCtl::EnumModules(uint32_t pid,
+                             std::vector<DMMDZZ_MODULE_ENTRY>& outModules,
+                             ULONG maxModules)
+{
+    outModules.clear();
+    if (maxModules == 0) return;
+
+    const ULONG headerSize    = sizeof(DMMDZZ_ENUM_MODULES);
+    const ULONG modulesOffset = headerSize;
+    const ULONG totalSize     = modulesOffset +
+                                (ULONG)(maxModules * sizeof(DMMDZZ_MODULE_ENTRY));
+
+    std::vector<uint8_t> buf(totalSize, 0);
+    auto* hdr = reinterpret_cast<DMMDZZ_ENUM_MODULES*>(buf.data());
+
+    hdr->ProcessId     = (HANDLE)(ULONG_PTR)pid;
+    hdr->MaxModules    = maxModules;
+    hdr->ModulesOffset = modulesOffset;
+
+    DWORD ret = 0;
+    SendIoctl(IOCTL_DMMDZZ_ENUM_MODULES,
+              buf.data(), totalSize,
+              buf.data(), totalSize,
+              &ret);
+
+    if (hdr->Hdr.Status != 0)
+        throw std::runtime_error("EnumModules failed (NTSTATUS=0x" +
+            std::to_string((unsigned long)hdr->Hdr.Status) + ")");
+
+    outModules.reserve(hdr->ModuleCount);
+    DMMDZZ_MODULE_ENTRY* mods = reinterpret_cast<DMMDZZ_MODULE_ENTRY*>(
+        buf.data() + modulesOffset);
+    for (ULONG i = 0; i < hdr->ModuleCount; i++) {
+        outModules.push_back(mods[i]);
+    }
+}
+
+// -----------------------------------------------------------------------------
+// PtrScan — multi-level pointer chain scan via IOCTL_DMMDZZ_PTRSCAN.
+//
+// Buffer layout:
+//   [DMMDZZ_PTRSCAN_REQUEST header][DMMDZZ_MODULE_RANGE[]][DMMDZZ_PTR_CHAIN[]]
+//
+// The driver does up to MaxDepth passes over process memory, building chains
+// of 8-byte pointers that eventually resolve to TargetAddress.
+// -----------------------------------------------------------------------------
+void DriverCtl::PtrScan(uint32_t pid,
+                        uintptr_t targetAddress,
+                        ULONG maxDepth,
+                        const std::vector<DMMDZZ_MODULE_RANGE>& moduleRanges,
+                        std::vector<DMMDZZ_PTR_CHAIN>& outChains,
+                        ULONG maxChains)
+{
+    outChains.clear();
+    if (maxDepth == 0 || maxChains == 0) return;
+
+    if (maxDepth > DMMDZZ_PTRSCAN_MAX_DEPTH)
+        maxDepth = DMMDZZ_PTRSCAN_MAX_DEPTH;
+
+    const ULONG numRanges = (ULONG)moduleRanges.size();
+
+    // Layout: header | moduleRanges[] | chains[]
+    const ULONG headerSize        = sizeof(DMMDZZ_PTRSCAN_REQUEST);
+    const ULONG moduleRangesOff   = headerSize;
+    const ULONG moduleRangesSize  = numRanges * (ULONG)sizeof(DMMDZZ_MODULE_RANGE);
+    // Align results offset to 8 bytes
+    const ULONG resultsOffset     = (moduleRangesOff + moduleRangesSize + 7) & ~7u;
+    const ULONG resultsSize       = maxChains * (ULONG)sizeof(DMMDZZ_PTR_CHAIN);
+    const ULONG totalSize         = resultsOffset + resultsSize;
+
+    std::vector<uint8_t> buf(totalSize, 0);
+    auto* hdr = reinterpret_cast<DMMDZZ_PTRSCAN_REQUEST*>(buf.data());
+
+    hdr->ProcessId          = (HANDLE)(ULONG_PTR)pid;
+    hdr->TargetAddress      = targetAddress;
+    hdr->MaxDepth           = maxDepth;
+    hdr->MaxChains          = maxChains;
+    hdr->NumModuleRanges    = numRanges;
+    hdr->ModuleRangesOffset = moduleRangesOff;
+    hdr->ResultsOffset      = resultsOffset;
+
+    // Copy module ranges into buffer
+    if (numRanges > 0) {
+        std::memcpy(buf.data() + moduleRangesOff,
+                    moduleRanges.data(),
+                    moduleRangesSize);
+    }
+
+    std::printf("[*] IOCTL buffer: header=%u modRangesOff=%u numRanges=%u "
+                "resultsOff=%u maxChains=%u totalSize=%u\n",
+                (unsigned)headerSize, (unsigned)moduleRangesOff,
+                (unsigned)numRanges, (unsigned)resultsOffset,
+                (unsigned)maxChains, (unsigned)totalSize);
+
+    DWORD ret = 0;
+    SendIoctl(IOCTL_DMMDZZ_PTRSCAN,
+              buf.data(), totalSize,
+              buf.data(), totalSize,
+              &ret);
+
+    if (hdr->Hdr.Status != 0)
+        throw std::runtime_error("PtrScan failed (NTSTATUS=0x" +
+            std::to_string((unsigned long)hdr->Hdr.Status) + ")");
+
+    outChains.reserve(hdr->ChainCount);
+    DMMDZZ_PTR_CHAIN* chains = reinterpret_cast<DMMDZZ_PTR_CHAIN*>(
+        buf.data() + resultsOffset);
+    for (ULONG i = 0; i < hdr->ChainCount; i++) {
+        outChains.push_back(chains[i]);
+    }
+}
+
+// -----------------------------------------------------------------------------
+uintptr_t DriverCtl::HideProcess(uint32_t pid)
+{
+    DMMDZZ_HIDE_PROCESS req{};
+    req.ProcessId = (HANDLE)(ULONG_PTR)pid;
+
+    DWORD ret = 0;
+    SendIoctl(IOCTL_DMMDZZ_HIDE_PROCESS, &req, sizeof(req), &req, sizeof(req), &ret);
+
+    if (req.Hdr.Status != 0)
+        throw std::runtime_error("HideProcess failed (NTSTATUS=0x" +
+            std::to_string((unsigned long)req.Hdr.Status) +
+            ", ExtendedStatus=" + std::to_string(req.Hdr.ExtendedStatus) + ")");
+
+    return req.EProcessVA;
+}
+
+// -----------------------------------------------------------------------------
+void DriverCtl::UnhideProcess()
+{
+    DMMDZZ_HIDE_PROCESS req{};
+
+    DWORD ret = 0;
+    SendIoctl(IOCTL_DMMDZZ_UNHIDE_PROCESS, &req, sizeof(req), &req, sizeof(req), &ret);
+
+    if (req.Hdr.Status != 0)
+        throw std::runtime_error("UnhideProcess failed (NTSTATUS=0x" +
+            std::to_string((unsigned long)req.Hdr.Status) +
+            ", ExtendedStatus=" + std::to_string(req.Hdr.ExtendedStatus) + ")");
 }
 
 } // namespace dmmdzz
